@@ -6,6 +6,7 @@ import { Text, View, Pressable } from "react-native";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import Animated from "react-native-reanimated";
 import data from "../../data.json";
 
 type Destination = (typeof data.destinations)[0];
@@ -29,10 +30,10 @@ function DestinationCard({ item }: { item: Destination }) {
 	return (
 		<Pressable style={styles.card} onPress={handlePress}>
 			<View style={styles.imageContainer}>
-				<Image
+				<Animated.Image
 					source={{ uri: item.image }}
-					placeholder="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop&crop=center"
 					style={styles.cardImage}
+					sharedTransitionTag={item.name}
 				/>
 				<BlurView intensity={25} style={styles.textOverlay}>
 					<Text style={styles.cardTitle}>{item.name}</Text>

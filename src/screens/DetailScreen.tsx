@@ -3,6 +3,7 @@ import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import React from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
+import Animated from "react-native-reanimated";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import type data from "../../data.json";
 
@@ -44,14 +45,17 @@ export default function DetailScreen({ route, navigation }: Props) {
 	return (
 		<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 			<View style={styles.imageContainer}>
-				<Image
+				<Animated.Image
 					source={{ uri: destination.image }}
-					placeholder="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop&crop=center"
 					style={styles.heroImage}
+					sharedTransitionTag={destination.name}
 				/>
 
 				<BlurView intensity={30} style={styles.titleOverlay}>
 					<Text style={styles.destinationTitle}>{destination.name}</Text>
+					<Text style={styles.destinationSubtitle}>
+						{destination.description.split(".")[0]}
+					</Text>
 				</BlurView>
 			</View>
 
