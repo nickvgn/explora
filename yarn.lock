@@ -3185,6 +3185,7 @@ __metadata:
     "@shopify/flash-list": "npm:^2.0.0-rc.2"
     "@types/react": "npm:~19.0.10"
     expo: "npm:~53.0.9"
+    expo-blur: "npm:~14.1.4"
     expo-image: "npm:~2.1.7"
     expo-status-bar: "npm:~2.2.3"
     react: "npm:19.0.0"
@@ -3211,6 +3212,17 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/0cb762147b1e6becf204c8445c9169fb8465ade493f747cda12551fdbc20908d33406e4a2e41451b27fda40e5691e682820e841810918b4b140a4007136fcbd3
+  languageName: node
+  linkType: hard
+
+"expo-blur@npm:~14.1.4":
+  version: 14.1.4
+  resolution: "expo-blur@npm:14.1.4"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/6b9076a42130d591dcdd0ee30d6af524b27d92a7cf347b7e27a18c910d63e4aca7374c48025af590feff43597cc5fc87f024143efb4d3e528ec8a5e3b4e2aad2
   languageName: node
   linkType: hard
 
