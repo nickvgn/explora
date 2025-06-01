@@ -2,13 +2,22 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import React from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import Animated, { 
+	useAnimatedScrollHandler, 
+	useSharedValue, 
+	useAnimatedStyle, 
+	interpolate, 
+	Extrapolation 
+} from "react-native-reanimated";
 import data from "../../data.json";
 import type { Destination, RootStackParamList } from "../navigation/types";
+
+const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
 
 type Props = NativeStackScreenProps<RootStackParamList, "Detail">;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -25,6 +34,43 @@ function InfoPill({ icon, text }: { icon: string; text: string }) {
 export default function DetailScreen({ route }: Props) {
 	const navigation = useNavigation<NavigationProp>();
 	const { destination } = route.params;
+
+	const translationY = useSharedValue(0);
+	const scrollHandler = useAnimatedScrollHandler((event) => {
+		translationY.value = event.contentOffset.y;
+	});
+
+	const animatedImageStyle = useAnimatedStyle(() => {
+		return {
+			transform: [
+				{
+					scale: interpolate(translationY.value, [-50, 0], [1.3, 1], {
+						extrapolateLeft: 'extend',
+						extrapolateRight: 'clamp',
+					}),
+				},
+				{
+					translateY: interpolate(translationY.value, [0, 50], [0, 50], Extrapolation.CLAMP),
+				},
+			],
+		};
+	});
+
+	const animatedTextStyle = useAnimatedStyle(() => {
+		return {
+			opacity: interpolate(translationY.value, [0, IMAGE_HEIGHT * 0.25], [1, 0], Extrapolation.CLAMP),
+			transform: [
+				{
+					translateY: interpolate(
+						translationY.value,
+						[0, IMAGE_HEIGHT * 0.25],
+						[0, 20],
+						Extrapolation.CLAMP,
+					),
+				},
+			],
+		};
+	});
 
 	const formatCoordinate = (lat: number, lng: number) => {
 		return `${Math.abs(lat).toFixed(4)}°${lat >= 0 ? "N" : "S"}, ${Math.abs(lng).toFixed(4)}°${lng >= 0 ? "E" : "W"}`;
@@ -50,13 +96,22 @@ export default function DetailScreen({ route }: Props) {
 	};
 
 	return (
-		<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-			<View style={styles.imageContainer}>
-				<Image source={{ uri: destination.image }} style={styles.heroImage} />
+		<Animated.ScrollView 
+			style={styles.container} 
+			showsVerticalScrollIndicator={false}
+			onScroll={scrollHandler}
+			scrollEventThrottle={1}
+		>
+			<View style={styles.heroSection}>
+				<Animated.View style={[styles.imageContainer, animatedImageStyle]}>
+					<Image source={{ uri: destination.image }} style={styles.heroImage} />
+				</Animated.View>
 
-				<BlurView intensity={30} style={styles.titleOverlay}>
-					<Text style={styles.destinationTitle}>{destination.name}</Text>
-				</BlurView>
+				<Animated.View style={[styles.titleOverlay, animatedTextStyle]}>
+					<BlurView intensity={30} style={styles.blurContainer}>
+						<Text style={styles.destinationTitle}>{destination.name}</Text>
+					</BlurView>
+				</Animated.View>
 			</View>
 
 			<View style={styles.content}>
@@ -101,7 +156,7 @@ export default function DetailScreen({ route }: Props) {
 					</Pressable>
 				</View>
 			</View>
-		</ScrollView>
+		</Animated.ScrollView>
 	);
 }
 
@@ -110,14 +165,18 @@ const styles = StyleSheet.create((theme, rt) => ({
 		flex: 1,
 		backgroundColor: theme.colors.background,
 	},
-	imageContainer: {
+	heroSection: {
 		position: "relative",
 		width: rt.screen.width,
-		height: 400,
+		height: IMAGE_HEIGHT,
+	},
+	imageContainer: {
+		width: rt.screen.width,
+		height: IMAGE_HEIGHT,
 	},
 	heroImage: {
 		width: rt.screen.width,
-		height: 400,
+		height: IMAGE_HEIGHT,
 		borderBottomLeftRadius: 24,
 		borderBottomRightRadius: 24,
 	},
@@ -126,6 +185,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 		bottom: 24,
 		left: 20,
 		right: 20,
+	},
+	blurContainer: {
 		borderRadius: 20,
 		padding: 20,
 		overflow: "hidden",
@@ -141,6 +202,10 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	content: {
 		padding: 20,
+		marginTop: -20,
+		backgroundColor: theme.colors.background,
+		borderTopLeftRadius: 20,
+		borderTopRightRadius: 20,
 	},
 	description: {
 		fontSize: rt.fontScale * 16,
@@ -207,3 +272,4 @@ const styles = StyleSheet.create((theme, rt) => ({
 		color: "white",
 	},
 }));
+
