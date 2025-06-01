@@ -16,10 +16,10 @@ function DestinationCard({ item }: { item: Destination }) {
 	return (
 		<View style={styles.card}>
 			<View style={styles.imageContainer}>
-				<Image 
-					source={{ uri: item.image }} 
+				<Image
+					source={{ uri: item.image }}
 					placeholder="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop&crop=center"
-					style={styles.cardImage} 
+					style={styles.cardImage}
 				/>
 				<BlurView intensity={25} style={styles.textOverlay}>
 					<Text style={styles.cardTitle}>{item.name}</Text>
@@ -31,28 +31,23 @@ function DestinationCard({ item }: { item: Destination }) {
 
 function HomeScreen() {
 	return (
-		<View style={styles.container}>
-			<FlashList
-				data={data.destinations}
-				renderItem={({ item }) => <DestinationCard item={item} />}
-				numColumns={2}
-				estimatedItemSize={240}
-				contentInsetAdjustmentBehavior="automatic"
-				contentContainerStyle={styles.listContainer}
-				ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
-			/>
-		</View>
+		<FlashList
+			data={data.destinations}
+			renderItem={({ item }) => <DestinationCard item={item} />}
+			numColumns={2}
+			estimatedItemSize={240}
+			contentInsetAdjustmentBehavior="automatic"
+			contentContainerStyle={styles.listContainer}
+			ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+		/>
 	);
 }
 
 const styles = StyleSheet.create((theme, rt) => ({
-	container: {
-		flex: 1,
-		backgroundColor: theme.colors.background,
-	},
 	listContainer: {
+		backgroundColor: theme.colors.background,
 		padding: 16,
-		paddingTop: rt.insets.top + 16,
+		paddingTop: 16,
 	},
 	card: {
 		backgroundColor: "white",
@@ -102,16 +97,20 @@ const RootStack = createNativeStackNavigator({
 	screens: {
 		Home: {
 			screen: HomeScreen,
-			options: {
+			options: () => ({
 				title: "Explore",
 				headerLargeTitle: true,
-				headerTransparent: true,
-				headerBlurEffect: "regular",
+        headerTransparent: true,
+				// headerStyle: {
+				// 	backgroundColor: rt.colors.background,
+				// },
+				headerBlurEffect: "systemMaterialLight",
+				headerShadowVisible: false,
 				headerSearchBarOptions: {
 					placeholder: "Search",
 					hideWhenScrolling: true,
 				},
-			},
+			}),
 		},
 	},
 });
