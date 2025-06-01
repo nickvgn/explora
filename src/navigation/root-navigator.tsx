@@ -1,62 +1,67 @@
-import { createStaticNavigation } from "@react-navigation/native";
-import type { StaticParamList } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { UnistylesRuntime } from "react-native-unistyles";
-import HomeScreen from "../screens/HomeScreen";
-import DetailScreen from "../screens/DetailScreen";
-import MapScreen from "../screens/MapScreen";
+import React from "react";
+import { useUnistyles } from "react-native-unistyles";
 import ThemeButton from "../components/ThemeButton";
+import DetailScreen from "../screens/DetailScreen";
+import HomeScreen from "../screens/HomeScreen";
+import MapScreen from "../screens/MapScreen";
+import type { RootStackParamList } from "./types";
 
-const RootStack = createNativeStackNavigator({
-	screens: {
-		Home: {
-			screen: HomeScreen,
-			options: {
-				title: "Explore",
-				headerLargeTitle: true,
-				headerTransparent: true,
-				headerBlurEffect: "regular",
-				headerShadowVisible: false,
-				headerRight: () => <ThemeButton />,
-				contentStyle: {
-					backgroundColor: 'transparent',
-				},
-				headerSearchBarOptions: {
-					placeholder: "Search",
-					hideWhenScrolling: true,
-				},
-			},
-		},
-		Detail: {
-			screen: DetailScreen,
-			options: {
-				headerShown: true,
-				headerTransparent: true,
-				headerTitle: "",
-				headerShadowVisible: false,
-				headerTintColor: UnistylesRuntime.getTheme().colors.primary,
-			},
-		},
-		Map: {
-			screen: MapScreen,
-			options: {
-				headerShown: false,
-				presentation: "formSheet",
-				sheetAllowedDetents: [0.5, 1.0],
-				sheetLargestUndimmedDetentIndex: 0,
-				sheetGrabberVisible: true,
-				sheetCornerRadius: 20,
-			},
-		},
-	},
-});
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
-type RootStackParamList = StaticParamList<typeof RootStack>;
+export function Navigation() {
+	const { theme, rt } = useUnistyles();
 
-declare global {
-	namespace ReactNavigation {
-		interface RootParamList extends RootStackParamList {}
-	}
+	return (
+		<NavigationContainer>
+			<Stack.Navigator>
+				<Stack.Screen
+					name="Home"
+					component={HomeScreen}
+					options={{
+						title: "Explore",
+						headerLargeTitle: true,
+						headerLargeTitleStyle: {
+							color: theme.colors.primaryText,
+						},
+						headerTitleStyle: {
+							color: theme.colors.primaryText,
+						},
+						headerTransparent: true,
+						headerBlurEffect: rt.themeName === "dark" ? "dark" : "light",
+						headerShadowVisible: false,
+						contentStyle: {
+							backgroundColor: theme.colors.background,
+						},
+						headerRight: () => <ThemeButton />,
+					}}
+				/>
+				<Stack.Screen
+					name="Detail"
+					component={DetailScreen}
+					options={{
+						headerShown: true,
+						headerTransparent: true,
+						headerTitle: "",
+						headerShadowVisible: false,
+						headerTintColor: theme.colors.primary,
+					}}
+				/>
+				<Stack.Screen
+					name="Map"
+					component={MapScreen}
+					options={{
+						headerShown: false,
+						presentation: "formSheet",
+						sheetAllowedDetents: [0.5, 1.0],
+						sheetLargestUndimmedDetentIndex: 0,
+						sheetGrabberVisible: true,
+						sheetCornerRadius: 20,
+					}}
+				/>
+			</Stack.Navigator>
+		</NavigationContainer>
+	);
 }
 
-export const Navigation = createStaticNavigation(RootStack); 

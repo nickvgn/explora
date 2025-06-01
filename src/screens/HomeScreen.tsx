@@ -49,12 +49,10 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create((theme, rt) => ({
 	listContainer: {
-		backgroundColor: theme.colors.background,
 		padding: 16,
 		paddingTop: 16,
 	},
 	card: {
-		backgroundColor: theme.colors.cardBackground,
 		borderRadius: 24,
 		marginHorizontal: 8,
 		shadowColor: "#000",
