@@ -36,7 +36,6 @@ export const darkTheme = {
 	},
 };
 
-// TypeScript type definitions
 export type AppThemes = {
 	light: typeof lightTheme;
 	dark: typeof darkTheme;

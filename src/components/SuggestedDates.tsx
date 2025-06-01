@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { Alert, Text, View } from "react-native";
 import {
 	PERMISSIONS,
@@ -7,18 +7,18 @@ import {
 	openSettings,
 	request,
 } from "react-native-permissions";
-import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
+import { StyleSheet } from "react-native-unistyles";
 import NativeEventKit from "../../specs/NativeEventKit";
 import { useTravelStore } from "../store/travelStore";
 import CalendarButton from "./CalendarButton";
 
-interface TravelPlanningSectionProps {
+type TravelPlanningSectionProps = {
 	destinationName: string;
 	destinationDescription: string;
 	suggestedDates: string[];
-}
+};
 
-function TravelPlanningSection({
+export function SuggestedDates({
 	destinationName,
 	destinationDescription,
 	suggestedDates,
@@ -33,13 +33,13 @@ function TravelPlanningSection({
 		(state) => state.removeEventByDestination,
 	);
 
-	const getTravelDateRange = useCallback(() => {
+	function getTravelDateRange() {
 		const startDate = new Date(suggestedDates[0]);
 		const endDate = new Date(suggestedDates[1]);
 		return `${startDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${endDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
-	}, [suggestedDates]);
+	}
 
-	const checkCalendarPermission = useCallback(async (): Promise<boolean> => {
+	async function checkCalendarPermission(): Promise<boolean> {
 		const permissionStatus = await check(PERMISSIONS.IOS.CALENDARS);
 
 		switch (permissionStatus) {
@@ -70,9 +70,9 @@ function TravelPlanningSection({
 			default:
 				return false;
 		}
-	}, []);
+	}
 
-	const createCalendarEvent = useCallback(() => {
+	function createCalendarEvent() {
 		const startDate = suggestedDates[0];
 		const endDate = suggestedDates[1];
 		const locationString = destinationName;
@@ -92,22 +92,24 @@ function TravelPlanningSection({
 		}
 
 		addEvent(newEventId, destinationName);
-	}, [destinationName, suggestedDates, destinationDescription, addEvent]);
+	}
 
-	const deleteCalendarEvent = useCallback(() => {
-		if (!eventId) return;
+	function deleteCalendarEvent() {
+		if (!eventId) {
+			return;
+		}
 
-		const success = NativeEventKit.deleteEvent(eventId);
+		const isSuccess = NativeEventKit.deleteEvent(eventId);
 
-		if (!success) {
+		if (!isSuccess) {
 			Alert.alert("Error", "Failed to remove event from calendar");
 			return;
 		}
 
 		removeEventByDestination(destinationName);
-	}, [eventId, destinationName, removeEventByDestination]);
+	}
 
-	const handleCalendarAction = useCallback(async () => {
+	async function handleCalendarAction() {
 		setIsCalendarLoading(true);
 
 		try {
@@ -121,23 +123,16 @@ function TravelPlanningSection({
 			}
 		} catch (error) {
 			Alert.alert("Error", "Calendar operation failed");
-			console.error("Calendar error:", error);
 		} finally {
 			setIsCalendarLoading(false);
 		}
-	}, [
-		eventId,
-		deleteCalendarEvent,
-		checkCalendarPermission,
-		createCalendarEvent,
-	]);
+	}
 
 	return (
 		<View style={styles.calendarSection}>
-			<Text style={styles.sectionTitle}>Travel Planning</Text>
 			<View style={styles.calendarCard}>
 				<View style={styles.calendarInfo}>
-					<Text style={styles.calendarTitle}>Suggested Travel Dates</Text>
+					<Text style={styles.calendarTitle}>Suggested Dates</Text>
 					<Text style={styles.calendarDates}>{getTravelDateRange()}</Text>
 					<View
 						style={[
@@ -152,14 +147,11 @@ function TravelPlanningSection({
 					hasEvent={!!eventId}
 					isLoading={isCalendarLoading}
 					onPress={handleCalendarAction}
-					onConfirmation={() => {}}
 				/>
 			</View>
 		</View>
 	);
 }
-
-export default React.memo(TravelPlanningSection);
 
 const styles = StyleSheet.create((theme, rt) => ({
 	calendarSection: {

@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { Suspense } from "react";
@@ -8,20 +7,16 @@ import Animated, {
 	useSharedValue,
 	FadeInUp,
 } from "react-native-reanimated";
-import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
-import DestinationHeader from "../components/DestinationHeader";
-import TravelPlanningSection from "../components/TravelPlanningSection";
+import { StyleSheet } from "react-native-unistyles";
+import { DestinationHeader } from "../components/DestinationHeader";
+import { SuggestedDates } from "../components/SuggestedDates";
 import type { RootStackParamList } from "../navigation/types";
-
-const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
 
 const LazyMapPreview = React.lazy(() => import("../components/MapPreview"));
 
 type Props = NativeStackScreenProps<RootStackParamList, "Detail">;
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-export default function DetailScreen({ route }: Props) {
-	const navigation = useNavigation<NavigationProp>();
+export default function DetailScreen({ route, navigation }: Props) {
 	const { destination } = route.params;
 
 	const translationY = useSharedValue(0);
@@ -29,7 +24,7 @@ export default function DetailScreen({ route }: Props) {
 		translationY.value = event.contentOffset.y;
 	});
 
-	const handleMapPress = () => {
+	function handleMapPress () {
 		const location = destination.location;
 
 		navigation.navigate("Map", {
@@ -45,7 +40,11 @@ export default function DetailScreen({ route }: Props) {
 			onScroll={scrollHandler}
 			scrollEventThrottle={1}
 		>
-			<DestinationHeader sv={translationY} destination={destination} />
+			<DestinationHeader
+				sv={translationY}
+				title={destination.name}
+				image={destination.image}
+			/>
 
 			<View style={styles.content}>
 				<Animated.View entering={FadeInUp.delay(100).duration(300)}>
@@ -53,7 +52,8 @@ export default function DetailScreen({ route }: Props) {
 				</Animated.View>
 
 				<Animated.View entering={FadeInUp.delay(200).duration(300)}>
-					<TravelPlanningSection
+					<Text style={styles.sectionTitle}>Travel Planning</Text>
+					<SuggestedDates
 						destinationName={destination.name}
 						destinationDescription={destination.description}
 						suggestedDates={destination.suggestedTravelDates}

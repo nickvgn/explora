@@ -9,12 +9,12 @@ const ThemedMapView = withUnistyles(MapView, (_, rt) => ({
 		| "light",
 }));
 
-interface MapPreviewProps {
+type MapPreviewProps = {
 	latitude: number;
 	longitude: number;
 	title: string;
 	onPress: () => void;
-}
+};
 
 export default function MapPreview({
 	latitude,

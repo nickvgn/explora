@@ -7,7 +7,7 @@ import {
 	useUnistyles,
 } from "react-native-unistyles";
 
-export default function ThemeButton() {
+export function ThemeButton() {
 	const { theme, rt } = useUnistyles();
 
 	const toggleTheme = () => {
@@ -19,7 +19,11 @@ export default function ThemeButton() {
 	const isDark = rt.themeName === "dark";
 
 	return (
-		<Pressable style={styles.button} onPress={toggleTheme}>
+		<Pressable
+      style={styles.button}
+      hitSlop={15}
+      onPress={toggleTheme}
+    >
 			<Ionicons
 				name={isDark ? "sunny" : "moon"}
 				size={24}
@@ -29,7 +33,7 @@ export default function ThemeButton() {
 	);
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create({
 	button: {
 		padding: 8,
 		borderRadius: 20,
@@ -37,4 +41,4 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: "center",
 		justifyContent: "center",
 	},
-}));
+});

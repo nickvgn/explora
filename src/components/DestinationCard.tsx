@@ -19,20 +19,20 @@ const ThemedCalendarIcon = withUnistyles(AntDesign, (theme) => ({
 	color: theme.colors.primaryText,
 }));
 
-interface DestinationCardProps {
+type DestinationCardProps = {
 	item: Destination;
-	index: number;
-}
+};
 
-export default function DestinationCard({ item, index }: DestinationCardProps) {
+export function DestinationCard({ item }: DestinationCardProps) {
 	const navigation = useNavigation<NavigationProp>();
-	const eventId = useTravelStore((state) =>
-		state.getEventByDestination(item.name),
+	const getEventByDestination = useTravelStore(
+		(state) => state.getEventByDestination,
 	);
+	const eventId = getEventByDestination(item.name);
 
-	const handlePress = () => {
+	function handlePress() {
 		navigation.navigate("Detail", { destination: item });
-	};
+	}
 
 	return (
 		<Pressable style={styles.card} onPress={handlePress}>
@@ -71,6 +71,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		shadowRadius: 12,
 		elevation: 8,
 		overflow: "hidden",
+		marginBottom: 16,
 	},
 	imageContainer: {
 		position: "relative",

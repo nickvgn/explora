@@ -7,8 +7,7 @@ import type { RootStackParamList } from "../navigation/types";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Map">;
 
-// Create a themed MapView component
-const ThemedMapView = withUnistyles(MapView, (theme, rt) => ({
+const ThemedMapView = withUnistyles(MapView, (_, rt) => ({
 	userInterfaceStyle: (rt.themeName === "dark" ? "dark" : "light") as
 		| "dark"
 		| "light",
@@ -44,7 +43,7 @@ export default function MapScreen({ route }: Props) {
 	);
 }
 
-const styles = StyleSheet.create((theme, rt) => ({
+const styles = StyleSheet.create((_, rt) => ({
 	map: {
 		flex: 1,
 		width: rt.screen.width,

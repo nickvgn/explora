@@ -1,6 +1,13 @@
-import React, { ReactNode } from "react";
-import { View, StyleSheet } from "react-native";
-import { useFonts, Manrope_400Regular, Manrope_500Medium, Manrope_600SemiBold, Manrope_700Bold, Manrope_800ExtraBold } from "@expo-google-fonts/manrope";
+import {
+	Manrope_400Regular,
+	Manrope_500Medium,
+	Manrope_600SemiBold,
+	Manrope_700Bold,
+	Manrope_800ExtraBold,
+	useFonts,
+} from "@expo-google-fonts/manrope";
+import React, { type ReactNode } from "react";
+import { StyleSheet, View } from "react-native";
 
 interface FontProviderProps {
 	children: ReactNode;
@@ -27,4 +34,5 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#FFFCF8",
 	},
-}); 
+});
+

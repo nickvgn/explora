@@ -6,20 +6,18 @@ import Animated, {
 	useAnimatedStyle,
 	withSpring,
 } from "react-native-reanimated";
-import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
+import { StyleSheet } from "react-native-unistyles";
 
 type CalendarButtonProps = {
 	hasEvent: boolean;
 	isLoading: boolean;
 	onPress: () => void;
-	onConfirmation: (isRemove: boolean) => void;
 };
 
 export default function CalendarButton({
 	hasEvent,
 	isLoading,
 	onPress,
-	onConfirmation,
 }: CalendarButtonProps) {
 	const [confirmationType, setConfirmationType] = useState<
 		"none" | "add" | "remove"
@@ -51,7 +49,6 @@ export default function CalendarButton({
 
 	const handlePress = () => {
 		onPress();
-		onConfirmation(hasEvent);
 		showConfirmationAnimation(hasEvent);
 	};
 
@@ -110,8 +107,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 		borderRadius: 16,
 		minWidth: 140,
 		height: 48,
-		alignItems: "center" as const,
-		justifyContent: "center" as const,
+		alignItems: "center",
+		justifyContent: "center",
 	}),
 	calendarButtonRemove: {
 		backgroundColor: theme.colors.destructive,
@@ -123,7 +120,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontSize: rt.fontScale * 14,
 		fontFamily: theme.fonts.bold,
 		color: "white",
-		textAlign: "center" as const,
+		textAlign: "center",
 	},
 	calendarButtonTextRemove: {
 		color: "white",
