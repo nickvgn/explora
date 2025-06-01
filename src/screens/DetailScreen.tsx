@@ -18,7 +18,6 @@ import { useDestinationsStore } from "../store/destinationsStore";
 
 const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
 
-// Create a themed MapView component
 const ThemedMapView = withUnistyles(MapView, (theme, rt) => ({
 	userInterfaceStyle: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
 }));

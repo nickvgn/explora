@@ -6,6 +6,7 @@ export const lightTheme = {
 		background: '#FFFCF8',
 		cardBackground: '#FFFFFF',
 		destructive: '#EF4444',
+		success: '#4CAF50',
 	}
 };
 
@@ -17,6 +18,7 @@ export const darkTheme = {
 		background: '#121212',
 		cardBackground: '#1E1E1E',
 		destructive: '#FF6B6B',
+		success: '#66BB6A',
 	}
 };
 

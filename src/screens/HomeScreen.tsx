@@ -11,7 +11,6 @@ import { useDestinationsStore } from "../store/destinationsStore";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-// Create a themed BlurView component
 const ThemedBlurView = withUnistyles(BlurView, (theme, rt) => ({
 	tint: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
 }));

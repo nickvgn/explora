@@ -14,7 +14,6 @@ import type { Destination } from "../navigation/types";
 
 const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
 
-// Create a themed BlurView component
 const ThemedBlurView = withUnistyles(BlurView, (theme, rt) => ({
 	tint: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
 }));
@@ -107,8 +106,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 	titleOverlay: {
 		position: "absolute",
 		bottom: 24,
-		left: 20,
-		right: 20,
+		left: 4,
+		right: 4,
 	},
 	blurContainer: {
 		borderRadius: 20,

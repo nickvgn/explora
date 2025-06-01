@@ -32,16 +32,16 @@ export default function CalendarButton({
 		confirmationScale.value = 0;
 		confirmationOpacity.value = 0;
 		
-		confirmationScale.value = withSpring(1, { damping: 15, stiffness: 300 });
-		confirmationOpacity.value = withSpring(1, { damping: 15, stiffness: 300 });
+		confirmationScale.value = withSpring(1, { damping: 12, stiffness: 350 });
+		confirmationOpacity.value = withSpring(1, { damping: 12, stiffness: 350 });
 		
 		setTimeout(() => {
-			confirmationScale.value = withSpring(0);
-			confirmationOpacity.value = withSpring(0);
+			confirmationScale.value = withSpring(0, { damping: 15, stiffness: 300 });
+			confirmationOpacity.value = withSpring(0, { damping: 15, stiffness: 300 });
 			setTimeout(() => {
 				setConfirmationType('none');
-			}, 300);
-		}, 1500);
+			}, 200);
+		}, 800);
 	}
 
 	const handlePress = () => {
@@ -60,10 +60,7 @@ export default function CalendarButton({
 	if (confirmationType !== 'none') {
 		return (
 			<View 
-				style={[
-					styles.calendarButton,
-					confirmationType === 'remove' && styles.calendarButtonRemove,
-				]}
+				style={styles.calendarButton(confirmationType)}
 			>
 				<Animated.View style={confirmationAnimatedStyle}>
 					{confirmationType === 'add' ? (
@@ -79,7 +76,7 @@ export default function CalendarButton({
 	return (
 		<Pressable 
 			style={[
-				styles.calendarButton,
+				styles.calendarButton(),
 				hasEvent && styles.calendarButtonRemove,
 				isLoading && styles.calendarButtonDisabled
 			]}
@@ -102,16 +99,20 @@ export default function CalendarButton({
 }
 
 const styles = StyleSheet.create((theme, rt) => ({
-	calendarButton: {
-		backgroundColor: theme.colors.primary,
+	calendarButton: (confirmationType?: string) => ({
+		backgroundColor: (() => {
+			if (confirmationType === 'remove') return theme.colors.destructive;
+			if (confirmationType === 'add') return theme.colors.success;
+			return theme.colors.primary;
+		})(),
 		paddingHorizontal: 20,
 		paddingVertical: 12,
 		borderRadius: 16,
 		minWidth: 140,
 		height: 48,
-		alignItems: "center",
-		justifyContent: "center",
-	},
+		alignItems: "center" as const,
+		justifyContent: "center" as const,
+	}),
 	calendarButtonRemove: {
 		backgroundColor: theme.colors.destructive,
 	},
@@ -120,9 +121,9 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	calendarButtonText: {
 		fontSize: rt.fontScale * 14,
-		fontWeight: "600",
+		fontWeight: "600" as const,
 		color: "white",
-		textAlign: "center",
+		textAlign: "center" as const,
 	},
 	calendarButtonTextRemove: {
 		color: "white",

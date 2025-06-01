@@ -126,10 +126,7 @@ function TravelPlanningSection({
 	return (
 		<View style={styles.calendarSection}>
 			<Text style={styles.sectionTitle}>Travel Planning</Text>
-			<View style={[
-				styles.calendarCard,
-				eventId && styles.calendarCardAdded
-			]}>
+			<View style={styles.calendarCard}>
 				<View style={styles.calendarInfo}>
 					<Text style={styles.calendarTitle}>Suggested Travel Dates</Text>
 					<Text style={styles.calendarDates}>{getTravelDateRange()}</Text>
@@ -172,9 +169,6 @@ const styles = StyleSheet.create((theme, rt) => ({
 		justifyContent: "space-between",
 		alignItems: "center",
 		minHeight: 120,
-	},
-	calendarCardAdded: {
-		backgroundColor: theme.colors.primaryAccent,
 	},
 	calendarInfo: {
 		flex: 1,
