@@ -255,12 +255,17 @@ export default function DetailScreen({ route }: Props) {
 				{/* Calendar Section */}
 				<View style={styles.calendarSection}>
 					<Text style={styles.sectionTitle}>Travel Planning</Text>
-					<View style={styles.calendarCard}>
+					<View style={[
+						styles.calendarCard,
+						destination.eventId && styles.calendarCardAdded
+					]}>
 						<View style={styles.calendarInfo}>
 							<Text style={styles.calendarTitle}>Suggested Travel Dates</Text>
 							<Text style={styles.calendarDates}>{getTravelDateRange()}</Text>
 							{destination.eventId && (
-								<Text style={styles.calendarStatus}>✅ Added to calendar</Text>
+								<View style={styles.calendarStatusBadge}>
+									<Text style={styles.calendarStatusText}>✓ Added to calendar</Text>
+								</View>
 							)}
 						</View>
 						<Pressable 
@@ -279,7 +284,7 @@ export default function DetailScreen({ route }: Props) {
 								{isCalendarLoading 
 									? "Loading..." 
 									: destination.eventId 
-										? "Remove from Calendar" 
+										? "Remove" 
 										: "Add to Calendar"
 								}
 							</Text>
@@ -437,6 +442,9 @@ const styles = StyleSheet.create((theme, rt) => ({
 		justifyContent: "space-between",
 		alignItems: "center",
 	},
+	calendarCardAdded: {
+		backgroundColor: theme.colors.secondary,
+	},
 	calendarInfo: {
 		flex: 1,
 		marginRight: 16,
@@ -451,12 +459,19 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontSize: rt.fontScale * 16,
 		color: theme.colors.text,
 		fontWeight: "600",
+		marginBottom: 8,
 	},
-	calendarStatus: {
+	calendarStatusBadge: {
+		backgroundColor: theme.colors.primary,
+		paddingHorizontal: 8,
+		paddingVertical: 4,
+		borderRadius: 8,
+		alignSelf: "flex-start",
+	},
+	calendarStatusText: {
 		fontSize: rt.fontScale * 14,
 		fontWeight: "600",
-		color: theme.colors.primary,
-		marginTop: 4,
+		color: "white",
 	},
 	calendarButton: {
 		backgroundColor: theme.colors.primary,
