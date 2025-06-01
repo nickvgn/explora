@@ -3,18 +3,9 @@ import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import React from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import Animated from "react-native-reanimated";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
-import type data from "../../data.json";
-
-type Destination = (typeof data.destinations)[0];
-
-type RootStackParamList = {
-	Home: undefined;
-	Detail: {
-		destination: Destination;
-	};
-};
+import data from "../../data.json";
+import type { Destination, RootStackParamList } from "../navigation/types";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Detail">;
 
@@ -45,23 +36,14 @@ export default function DetailScreen({ route, navigation }: Props) {
 	return (
 		<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 			<View style={styles.imageContainer}>
-				<Animated.Image
-					source={{ uri: destination.image }}
-					style={styles.heroImage}
-					sharedTransitionTag={destination.name}
-				/>
+				<Image source={{ uri: destination.image }} style={styles.heroImage} />
 
 				<BlurView intensity={30} style={styles.titleOverlay}>
 					<Text style={styles.destinationTitle}>{destination.name}</Text>
-					<Text style={styles.destinationSubtitle}>
-						{destination.description.split(".")[0]}
-					</Text>
 				</BlurView>
 			</View>
 
 			<View style={styles.content}>
-				<Text style={styles.description}>{destination.description}</Text>
-
 				<View style={styles.pillsContainer}>
 					<InfoPill
 						icon="📍"
@@ -74,6 +56,8 @@ export default function DetailScreen({ route, navigation }: Props) {
 					<InfoPill icon="🌟" text="4.8" />
 					<InfoPill icon="❤" text="2.4k" />
 				</View>
+
+				<Text style={styles.description}>{destination.description}</Text>
 			</View>
 		</ScrollView>
 	);
@@ -102,20 +86,13 @@ const styles = StyleSheet.create((theme, rt) => ({
 		right: 20,
 		borderRadius: 20,
 		padding: 20,
+		overflow: "hidden",
 	},
 	destinationTitle: {
 		fontSize: rt.fontScale * 32,
 		fontWeight: "800",
 		color: "white",
 		marginBottom: 4,
-		textShadowColor: "rgba(0, 0, 0, 0.3)",
-		textShadowOffset: { width: 0, height: 1 },
-		textShadowRadius: 2,
-	},
-	destinationSubtitle: {
-		fontSize: rt.fontScale * 16,
-		fontWeight: "500",
-		color: "rgba(255, 255, 255, 0.9)",
 		textShadowColor: "rgba(0, 0, 0, 0.3)",
 		textShadowOffset: { width: 0, height: 1 },
 		textShadowRadius: 2,
@@ -133,6 +110,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		flexDirection: "row",
 		flexWrap: "wrap",
 		gap: 12,
+		marginBottom: 24,
 	},
 	pill: {
 		flexDirection: "row",

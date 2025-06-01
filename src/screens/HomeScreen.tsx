@@ -1,22 +1,13 @@
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FlashList } from "@shopify/flash-list";
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import React from "react";
-import { Text, View, Pressable } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import Animated from "react-native-reanimated";
 import data from "../../data.json";
-
-type Destination = (typeof data.destinations)[0];
-
-type RootStackParamList = {
-	Home: undefined;
-	Detail: {
-		destination: Destination;
-	};
-};
+import type { Destination, RootStackParamList } from "../navigation/types";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -30,11 +21,7 @@ function DestinationCard({ item }: { item: Destination }) {
 	return (
 		<Pressable style={styles.card} onPress={handlePress}>
 			<View style={styles.imageContainer}>
-				<Animated.Image
-					source={{ uri: item.image }}
-					style={styles.cardImage}
-					sharedTransitionTag={item.name}
-				/>
+				<Image source={{ uri: item.image }} style={styles.cardImage} />
 				<BlurView intensity={25} style={styles.textOverlay}>
 					<Text style={styles.cardTitle}>{item.name}</Text>
 				</BlurView>
@@ -107,4 +94,3 @@ const styles = StyleSheet.create((theme, rt) => ({
 		textShadowRadius: 2,
 	},
 }));
-
