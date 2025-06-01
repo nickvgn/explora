@@ -1,32 +1,21 @@
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React from "react";
-import { Pressable, Text, View } from "react-native";
-import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+import React, { Suspense } from "react";
+import { Text, View } from "react-native";
 import Animated, {
 	useAnimatedScrollHandler,
 	useSharedValue,
 	FadeInUp,
-	type SharedValue,
 } from "react-native-reanimated";
-import {
-	StyleSheet,
-	UnistylesRuntime,
-	withUnistyles,
-} from "react-native-unistyles";
+import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import DestinationHeader from "../components/DestinationHeader";
 import TravelPlanningSection from "../components/TravelPlanningSection";
 import type { RootStackParamList } from "../navigation/types";
 
 const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
 
-const ThemedMapView = withUnistyles(MapView, (_, rt) => ({
-	userInterfaceStyle:
-		rt.colorScheme === "dark"
-			? ("dark" as const)
-			: ("light" as const),
-}));
+const LazyMapPreview = React.lazy(() => import("../components/MapPreview"));
 
 type Props = NativeStackScreenProps<RootStackParamList, "Detail">;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -40,15 +29,11 @@ export default function DetailScreen({ route }: Props) {
 		translationY.value = event.contentOffset.y;
 	});
 
-	const mapRegion = {
-		latitude: destination.location.latitude,
-		longitude: destination.location.longitude,
-		latitudeDelta: 0.01,
-		longitudeDelta: 0.01,
-	};
-
 	const handleMapPress = () => {
-		navigation.navigate("Map", { destination });
+		navigation.navigate("Map", {
+			latitude: destination.location.latitude,
+			longitude: destination.location.longitude,
+		});
 	};
 
 	return (
@@ -78,25 +63,14 @@ export default function DetailScreen({ route }: Props) {
 					style={styles.mapSection}
 				>
 					<Text style={styles.sectionTitle}>Location</Text>
-					<Pressable style={styles.mapPreview} onPress={handleMapPress}>
-						<ThemedMapView
-							style={styles.mapView}
-							provider={PROVIDER_DEFAULT}
-							initialRegion={mapRegion}
-							scrollEnabled={false}
-							zoomEnabled={false}
-							rotateEnabled={false}
-							pitchEnabled={false}
-						>
-							<Marker
-								coordinate={{
-									latitude: destination.location.latitude,
-									longitude: destination.location.longitude,
-								}}
-								title={destination.name}
-							/>
-						</ThemedMapView>
-					</Pressable>
+					<Suspense fallback={<View style={styles.mapFallback} />}>
+						<LazyMapPreview
+							latitude={destination.location.latitude}
+							longitude={destination.location.longitude}
+							title={destination.name}
+							onPress={handleMapPress}
+						/>
+					</Suspense>
 				</Animated.View>
 			</View>
 		</Animated.ScrollView>
@@ -130,30 +104,10 @@ const styles = StyleSheet.create((theme, rt) => ({
 		color: theme.colors.primaryText,
 		marginBottom: 12,
 	},
-	mapPreview: {
-		position: "relative",
+	mapFallback: {
 		height: 150,
 		borderRadius: 20,
 		overflow: "hidden",
 		backgroundColor: theme.colors.primaryAccent,
-	},
-	mapView: {
-		width: "100%",
-		height: 150,
-	},
-	mapOverlay: {
-		position: "absolute",
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		backgroundColor: "rgba(0, 0, 0, 0.3)",
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	mapOverlayText: {
-		fontSize: rt.fontScale * 16,
-		fontWeight: "600",
-		color: "white",
 	},
 }));
