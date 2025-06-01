@@ -1,0 +1,290 @@
+{
+  "destinations": [
+    {
+      "name": "Eiffel Tower",
+      "location": {
+        "latitude": 48.8584,
+        "longitude": 2.2945
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg",
+      "description": "Iconic iron lattice tower on the Champ de Mars in Paris, France. It's one of the world's most recognizable landmarks.",
+      "suggestedTravelDates": [
+        "2025-04-15",
+        "2025-09-20"
+      ]
+    },
+    {
+      "name": "Machu Picchu",
+      "location": {
+        "latitude": -13.1631,
+        "longitude": -72.5450
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Machu_Picchu%2C_Peru.jpg/1280px-Machu_Picchu%2C_Peru.jpg",
+      "description": "Ancient Incan city set high in the Andes Mountains in Peru, renowned for its sophisticated dry-stone walls and panoramic views.",
+      "suggestedTravelDates": [
+        "2025-06-10",
+        "2025-08-25"
+      ]
+    },
+    {
+      "name": "Great Barrier Reef",
+      "location": {
+        "latitude": -18.2871,
+        "longitude": 147.6992
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Great_Barrier_Reef_Biodiversity.jpg/1280px-Great_Barrier_Reef_Biodiversity.jpg",
+      "description": "World's largest coral reef system off the coast of Queensland, Australia, home to diverse marine life and vibrant coral formations.",
+      "suggestedTravelDates": [
+        "2025-05-01",
+        "2025-11-15"
+      ]
+    },
+    {
+      "name": "Santorini",
+      "location": {
+        "latitude": 36.3932,
+        "longitude": 25.4615
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Santorini_Sunset.jpg/1280px-Santorini_Sunset.jpg",
+      "description": "Picturesque Greek island known for its stunning sunsets, white-washed buildings, and blue-domed churches overlooking the Aegean Sea.",
+      "suggestedTravelDates": [
+        "2025-05-20",
+        "2025-09-10"
+      ]
+    },
+    {
+      "name": "Taj Mahal",
+      "location": {
+        "latitude": 27.1751,
+        "longitude": 78.0421
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Taj_Mahal%2C_Agra%2C_India_edit3.jpg/1280px-Taj_Mahal%2C_Agra%2C_India_edit3.jpg",
+      "description": "Magnificent white marble mausoleum in Agra, India, built by Mughal Emperor Shah Jahan in memory of his beloved wife.",
+      "suggestedTravelDates": [
+        "2025-11-01",
+        "2026-02-28"
+      ]
+    },
+    {
+      "name": "Grand Canyon",
+      "location": {
+        "latitude": 36.0544,
+        "longitude": -112.1401
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Canyon_River_Tree_%28165872763%29.jpeg/1280px-Canyon_River_Tree_%28165872763%29.jpeg",
+      "description": "Vast and colorful canyon carved by the Colorado River in Arizona, USA, offering breathtaking views and hiking opportunities.",
+      "suggestedTravelDates": [
+        "2025-04-01",
+        "2025-10-31"
+      ]
+    },
+    {
+      "name": "Petra",
+      "location": {
+        "latitude": 30.3285,
+        "longitude": 35.4444
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/The_Monastery%2C_Petra%2C_Jordan8.jpg/1280px-The_Monastery%2C_Petra%2C_Jordan8.jpg",
+      "description": "Ancient city in southern Jordan famous for its rock-cut architecture, especially the iconic Treasury facade.",
+      "suggestedTravelDates": [
+        "2025-03-15",
+        "2025-11-15"
+      ]
+    },
+    {
+      "name": "Angkor Wat",
+      "location": {
+        "latitude": 13.4125,
+        "longitude": 103.8670
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Angkor_Wat.jpg/1280px-Angkor_Wat.jpg",
+      "description": "Massive temple complex in Cambodia, originally constructed as a Hindu temple dedicated to Vishnu, later transformed into a Buddhist monument.",
+      "suggestedTravelDates": [
+        "2025-11-15",
+        "2026-02-28"
+      ]
+    },
+    {
+      "name": "Yellowstone National Park",
+      "location": {
+        "latitude": 44.4280,
+        "longitude": -110.5885
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Grand_prismatic_spring.jpg/1280px-Grand_prismatic_spring.jpg",
+      "description": "America's first national park, known for its geothermal features, diverse wildlife, and stunning landscapes.",
+      "suggestedTravelDates": [
+        "2025-06-01",
+        "2025-09-30"
+      ]
+    },
+    {
+      "name": "Venice",
+      "location": {
+        "latitude": 45.4408,
+        "longitude": 12.3155
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Canal_Grande_Chiesa_della_Salute_e_Dogana_dal_ponte_dell_Accademia.jpg/1280px-Canal_Grande_Chiesa_della_Salute_e_Dogana_dal_ponte_dell_Accademia.jpg",
+      "description": "Romantic Italian city built on more than 100 small islands in a lagoon in the Adriatic Sea, famous for its canals and historic architecture.",
+      "suggestedTravelDates": [
+        "2025-04-15",
+        "2025-10-31"
+      ]
+    },
+    {
+      "name": "Bora Bora",
+      "location": {
+        "latitude": -16.5004,
+        "longitude": -151.7415
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Bora_Bora_Hotel.jpg/1280px-Bora_Bora_Hotel.jpg",
+      "description": "Small South Pacific island northwest of Tahiti in French Polynesia, known for its turquoise lagoon, overwater bungalows, and luxury resorts.",
+      "suggestedTravelDates": [
+        "2025-05-01",
+        "2025-10-31"
+      ]
+    },
+    {
+      "name": "Maasai Mara",
+      "location": {
+        "latitude": -1.4833,
+        "longitude": 35.0000
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Maasai_Mara_at_Sunset.jpg/1280px-Maasai_Mara_at_Sunset.jpg",
+      "description": "Large game reserve in Narok County, Kenya, contiguous with the Serengeti National Park in Tanzania, famous for its exceptional population of lions, leopards, cheetahs, and annual wildebeest migration.",
+      "suggestedTravelDates": [
+        "2025-07-15",
+        "2025-10-15"
+      ]
+    },
+    {
+      "name": "Dubrovnik",
+      "location": {
+        "latitude": 42.6507,
+        "longitude": 18.0944
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Dubrovnik_-_Croatia.jpg/1280px-Dubrovnik_-_Croatia.jpg",
+      "description": "Croatian city on the Adriatic Sea, known for its distinctive Old Town, encircled with massive stone walls completed in the 16th century.",
+      "suggestedTravelDates": [
+        "2025-05-01",
+        "2025-09-30"
+      ]
+    },
+    {
+      "name": "Galápagos Islands",
+      "location": {
+        "latitude": -0.9538,
+        "longitude": -90.9656
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Galápagos_Giant_Tortoise_Geochelone_elephantopus.jpg/1280px-Galápagos_Giant_Tortoise_Geochelone_elephantopus.jpg",
+      "description": "Volcanic archipelago in the Pacific Ocean, part of Ecuador, known for its diverse and unique wildlife that inspired Charles Darwin's theory of evolution.",
+      "suggestedTravelDates": [
+        "2025-12-01",
+        "2026-05-31"
+      ]
+    },
+    {
+      "name": "Banff National Park",
+      "location": {
+        "latitude": 51.4968,
+        "longitude": -115.9281
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Moraine_Lake_17092005.jpg/1280px-Moraine_Lake_17092005.jpg",
+      "description": "Canada's oldest national park, located in the Rocky Mountains of Alberta, known for its turquoise lakes, snow-capped peaks, and abundant wildlife.",
+      "suggestedTravelDates": [
+        "2025-06-15",
+        "2025-09-15"
+      ]
+    },
+    {
+      "name": "Kyoto",
+      "location": {
+        "latitude": 35.0116,
+        "longitude": 135.7681
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Kiyomizu-dera_in_Kyoto-r.jpg/1280px-Kiyomizu-dera_in_Kyoto-r.jpg",
+      "description": "Former imperial capital of Japan, famous for its numerous classical Buddhist temples, gardens, imperial palaces, Shinto shrines and traditional wooden houses.",
+      "suggestedTravelDates": [
+        "2025-03-20",
+        "2025-11-30"
+      ]
+    },
+    {
+      "name": "Iguazu Falls",
+      "location": {
+        "latitude": -25.6953,
+        "longitude": -54.4367
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Iguazu_Décembre_2007_-_Panorama_7.jpg/1280px-Iguazu_Décembre_2007_-_Panorama_7.jpg",
+      "description": "Massive waterfalls system along the border of Argentina and Brazil, surrounded by lush subtropical rainforest.",
+      "suggestedTravelDates": [
+        "2025-03-01",
+        "2025-05-31"
+      ]
+    },
+    {
+      "name": "Cappadocia",
+      "location": {
+        "latitude": 38.6431,
+        "longitude": 34.8289
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Cappadocia_Ballooning_2.jpg/1280px-Cappadocia_Ballooning_2.jpg",
+      "description": "Semi-arid region in central Turkey, known for its distinctive 'fairy chimneys,' tall, cone-shaped rock formations clustered in Monks Valley, Göreme and elsewhere.",
+      "suggestedTravelDates": [
+        "2025-04-15",
+        "2025-10-31"
+      ]
+    },
+    {
+      "name": "Salar de Uyuni",
+      "location": {
+        "latitude": -20.1338,
+        "longitude": -67.4891
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Salar_Uyuni_au_coucher_du_soleil.jpg/1280px-Salar_Uyuni_au_coucher_du_soleil.jpg",
+      "description": "World's largest salt flat, located in Bolivia, offering surreal landscapes especially during the rainy season when it becomes a giant mirror.",
+      "suggestedTravelDates": [
+        "2025-03-01",
+        "2025-04-30"
+      ]
+    },
+    {
+      "name": "Petra",
+      "location": {
+        "latitude": 30.3285,
+        "longitude": 35.4444
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/The_Monastery%2C_Petra%2C_Jordan8.jpg/1280px-The_Monastery%2C_Petra%2C_Jordan8.jpg",
+      "description": "Ancient city in southern Jordan famous for its rock-cut architecture, especially the iconic Treasury facade.",
+      "suggestedTravelDates": [
+        "2025-03-15",
+        "2025-11-15"
+      ]
+    },
+    {
+      "name": "Zhangjiajie National Forest Park",
+      "location": {
+        "latitude": 29.3249,
+        "longitude": 110.4343
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/1_tianzi_mountain_wulingyuan_zhangjiajie_2012.jpg/1280px-1_tianzi_mountain_wulingyuan_zhangjiajie_2012.jpg",
+      "description": "Unique national park in China's Hunan Province, known for its towering sandstone pillars, the inspiration for the 'Hallelujah Mountains' in the movie Avatar.",
+      "suggestedTravelDates": [
+        "2025-04-15",
+        "2025-10-31"
+      ]
+    },
+    {
+      "name": "Amalfi Coast",
+      "location": {
+        "latitude": 40.6333,
+        "longitude": 14.6029
+      },
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Positano_-_Amalfi_Coast%2C_Campania%2C_Italy_-_June_15%2C_2013_01.jpg/1280px-Positano_-_Amalfi_Coast%2C_Campania%2C_Italy_-_June_15%2C_2013_01.jpg",
+      "description": "Stunning stretch of coastline on the southern edge of Italy's Sorrentine Peninsula, known for its dramatic cliffs and picturesque towns.",
+      "suggestedTravelDates": [
+        "2025-05-01",
+        "2025-09-30"
+      ]
+    }
+  ]
+}
