@@ -8,10 +8,15 @@ import Animated, {
 	Extrapolation,
 	type SharedValue,
 } from "react-native-reanimated";
-import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
+import { StyleSheet, UnistylesRuntime, withUnistyles } from "react-native-unistyles";
 import type { Destination } from "../navigation/types";
 
 const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
+
+// Create a themed BlurView component
+const ThemedBlurView = withUnistyles(BlurView, (theme, rt) => ({
+	tint: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
+}));
 
 interface DestinationHeaderProps {
 	sv: SharedValue<number>;
@@ -68,9 +73,9 @@ export default function DestinationHeader({ sv, destination }: DestinationHeader
 			</Animated.View>
 
 			<Animated.View style={[styles.titleOverlay, animatedTextStyle]}>
-				<BlurView intensity={30} style={styles.blurContainer}>
+				<ThemedBlurView intensity={30} style={styles.blurContainer}>
 					<Text style={styles.destinationTitle}>{destination.name}</Text>
-				</BlurView>
+				</ThemedBlurView>
 			</Animated.View>
 		</View>
 	);

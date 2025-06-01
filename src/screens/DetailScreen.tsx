@@ -9,13 +9,18 @@ import Animated, {
 	useSharedValue,
 	type SharedValue,
 } from "react-native-reanimated";
-import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
+import { StyleSheet, UnistylesRuntime, withUnistyles } from "react-native-unistyles";
 import DestinationHeader from "../components/DestinationHeader";
 import TravelPlanningSection from "../components/TravelPlanningSection";
 import type { Destination, RootStackParamList } from "../navigation/types";
 import { useDestinationsStore } from "../store/destinationsStore";
 
 const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
+
+// Create a themed MapView component
+const ThemedMapView = withUnistyles(MapView, (theme, rt) => ({
+	userInterfaceStyle: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
+}));
 
 type Props = NativeStackScreenProps<RootStackParamList, "Detail">;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -105,7 +110,7 @@ export default function DetailScreen({ route }: Props) {
 				<View style={styles.mapSection}>
 					<Text style={styles.sectionTitle}>Location</Text>
 					<Pressable style={styles.mapPreview} onPress={handleMapPress}>
-						<MapView
+						<ThemedMapView
 							style={styles.mapView}
 							provider={PROVIDER_DEFAULT}
 							region={mapRegion}
@@ -121,7 +126,7 @@ export default function DetailScreen({ route }: Props) {
 								}}
 								title={destination.name}
 							/>
-						</MapView>
+						</ThemedMapView>
 						<View style={styles.mapOverlay}>
 							<Text style={styles.mapOverlayText}>Tap to view full map</Text>
 						</View>

@@ -2,10 +2,15 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { View } from "react-native";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
-import { StyleSheet } from "react-native-unistyles";
+import { StyleSheet, withUnistyles } from "react-native-unistyles";
 import type { RootStackParamList } from "../navigation/types";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Map">;
+
+// Create a themed MapView component
+const ThemedMapView = withUnistyles(MapView, (theme, rt) => ({
+	userInterfaceStyle: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
+}));
 
 export default function MapScreen({ route }: Props) {
 	const { destination } = route.params;
@@ -19,7 +24,7 @@ export default function MapScreen({ route }: Props) {
 
 	return (
 		<View style={styles.container}>
-			<MapView
+			<ThemedMapView
 				style={styles.map}
 				provider={PROVIDER_DEFAULT}
 				region={mapRegion}
@@ -34,7 +39,7 @@ export default function MapScreen({ route }: Props) {
 					title={destination.name}
 					description={destination.description}
 				/>
-			</MapView>
+			</ThemedMapView>
 		</View>
 	);
 }

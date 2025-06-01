@@ -5,11 +5,16 @@ import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import React, { useMemo } from "react";
 import { Pressable, Text, View } from "react-native";
-import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
+import { StyleSheet, withUnistyles } from "react-native-unistyles";
 import type { Destination, RootStackParamList } from "../navigation/types";
 import { useDestinationsStore } from "../store/destinationsStore";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
+// Create a themed BlurView component
+const ThemedBlurView = withUnistyles(BlurView, (theme, rt) => ({
+	tint: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
+}));
 
 function DestinationCard({ item }: { item: Destination }) {
 	const navigation = useNavigation<NavigationProp>();
@@ -22,9 +27,12 @@ function DestinationCard({ item }: { item: Destination }) {
 		<Pressable style={styles.card} onPress={handlePress}>
 			<View style={styles.imageContainer}>
 				<Image source={{ uri: item.image }} style={styles.cardImage} />
-				<BlurView intensity={25} style={styles.textOverlay}>
+				<ThemedBlurView 
+					intensity={25}
+					style={styles.textOverlay}
+				>
 					<Text style={styles.cardTitle}>{item.name}</Text>
-				</BlurView>
+				</ThemedBlurView>
 			</View>
 		</Pressable>
 	);
