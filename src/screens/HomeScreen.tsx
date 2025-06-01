@@ -2,15 +2,32 @@ import { FlashList } from "@shopify/flash-list";
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, View, Pressable } from "react-native";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import data from "../../data.json";
 
 type Destination = (typeof data.destinations)[0];
 
+type RootStackParamList = {
+	Home: undefined;
+	Detail: {
+		destination: Destination;
+	};
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
 function DestinationCard({ item }: { item: Destination }) {
+	const navigation = useNavigation<NavigationProp>();
+
+	const handlePress = () => {
+		navigation.navigate("Detail", { destination: item });
+	};
+
 	return (
-		<View style={styles.card}>
+		<Pressable style={styles.card} onPress={handlePress}>
 			<View style={styles.imageContainer}>
 				<Image
 					source={{ uri: item.image }}
@@ -21,7 +38,7 @@ function DestinationCard({ item }: { item: Destination }) {
 					<Text style={styles.cardTitle}>{item.name}</Text>
 				</BlurView>
 			</View>
-		</View>
+		</Pressable>
 	);
 }
 

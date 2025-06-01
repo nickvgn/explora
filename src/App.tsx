@@ -5,6 +5,7 @@ import React from "react";
 import { UnistylesRuntime } from "react-native-unistyles";
 import "./styles/unistyles";
 import HomeScreen from "./screens/HomeScreen";
+import DetailScreen from "./screens/DetailScreen";
 
 const RootStack = createNativeStackNavigator({
 	screens: {
@@ -23,6 +24,12 @@ const RootStack = createNativeStackNavigator({
 					placeholder: "Search",
 					hideWhenScrolling: true,
 				},
+			},
+		},
+		Detail: {
+			screen: DetailScreen,
+			options: {
+				headerShown: false,
 			},
 		},
 	},
