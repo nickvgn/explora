@@ -4,6 +4,7 @@ const lightTheme = {
 	colors: {
 		primary: "#007AFF",
 		text: "#000000",
+		background: "#F8F9FA",
 	},
 };
 
@@ -11,6 +12,7 @@ const darkTheme = {
 	colors: {
 		primary: "#0A84FF",
 		text: "#FFFFFF",
+		background: "#0D1117",
 	},
 };
 
