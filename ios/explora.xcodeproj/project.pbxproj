@@ -13,6 +13,7 @@
 		B70FD9876DB793449ADF3256 /* libPods-explora.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C9A86E7FBD4FB26D08FC19 /* libPods-explora.a */; };
 		B74B6E74609CC9B8F6E827F5 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC78A31D53382E3D3A5AA53 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		E5C6A4C32DEC300E009B6EBC /* RCTNativeEventKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = E5C6A4C22DEC300E009B6EBC /* RCTNativeEventKit.mm */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,8 @@
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		C99E30B1F7A61161DED0BBAE /* Pods-explora.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-explora.release.xcconfig"; path = "Target Support Files/Pods-explora/Pods-explora.release.xcconfig"; sourceTree = "<group>"; };
 		CAC78A31D53382E3D3A5AA53 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-explora/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		E5C6A4C12DEC300E009B6EBC /* RCTNativeEventKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTNativeEventKit.h; sourceTree = "<group>"; };
+		E5C6A4C22DEC300E009B6EBC /* RCTNativeEventKit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTNativeEventKit.mm; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = explora/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* explora-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "explora-Bridging-Header.h"; path = "explora/explora-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -94,6 +97,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				E5C6A4C02DEC2FE4009B6EBC /* NativeEventKit */,
 				13B07FAE1A68108700A75B9A /* explora */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -129,6 +133,15 @@
 				66D3BE8FED6B7A5E26CFDE85 /* explora */,
 			);
 			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
+		E5C6A4C02DEC2FE4009B6EBC /* NativeEventKit */ = {
+			isa = PBXGroup;
+			children = (
+				E5C6A4C12DEC300E009B6EBC /* RCTNativeEventKit.h */,
+				E5C6A4C22DEC300E009B6EBC /* RCTNativeEventKit.mm */,
+			);
+			path = NativeEventKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -319,6 +332,7 @@
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
 				B74B6E74609CC9B8F6E827F5 /* ExpoModulesProvider.swift in Sources */,
+				E5C6A4C32DEC300E009B6EBC /* RCTNativeEventKit.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,10 +460,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -504,10 +515,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
