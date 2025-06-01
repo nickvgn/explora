@@ -29,7 +29,12 @@ const RootStack = createNativeStackNavigator({
 		Detail: {
 			screen: DetailScreen,
 			options: {
-				headerShown: false,
+				headerShown: true,
+				headerTransparent: true,
+				headerTitle: "",
+				headerBackTitleVisible: false,
+				headerShadowVisible: false,
+				headerTintColor: UnistylesRuntime.getTheme().colors.primary,
 			},
 		},
 	},

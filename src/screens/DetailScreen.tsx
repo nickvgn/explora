@@ -1,10 +1,10 @@
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import React from "react";
-import { Text, View, Pressable, ScrollView } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import data from "../../data.json";
+import type data from "../../data.json";
 
 type Destination = (typeof data.destinations)[0];
 
@@ -28,14 +28,17 @@ function InfoPill({ icon, text }: { icon: string; text: string }) {
 
 export default function DetailScreen({ route, navigation }: Props) {
 	const { destination } = route.params;
-	
+
 	const formatCoordinate = (lat: number, lng: number) => {
-		return `${Math.abs(lat).toFixed(4)}°${lat >= 0 ? 'N' : 'S'}, ${Math.abs(lng).toFixed(4)}°${lng >= 0 ? 'E' : 'W'}`;
+		return `${Math.abs(lat).toFixed(4)}°${lat >= 0 ? "N" : "S"}, ${Math.abs(lng).toFixed(4)}°${lng >= 0 ? "E" : "W"}`;
 	};
 
 	const getNextTravelDate = () => {
 		const nextDate = new Date(destination.suggestedTravelDates[0]);
-		return nextDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+		return nextDate.toLocaleDateString("en-US", {
+			month: "short",
+			day: "numeric",
+		});
 	};
 
 	return (
@@ -46,42 +49,26 @@ export default function DetailScreen({ route, navigation }: Props) {
 					placeholder="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop&crop=center"
 					style={styles.heroImage}
 				/>
-				
-				<BlurView intensity={25} style={styles.headerButtons}>
-					<Pressable style={styles.headerButton} onPress={() => navigation.goBack()}>
-						<Text style={styles.headerButtonText}>←</Text>
-					</Pressable>
-					<Pressable style={styles.headerButton}>
-						<Text style={styles.headerButtonText}>♡</Text>
-					</Pressable>
-				</BlurView>
 
 				<BlurView intensity={30} style={styles.titleOverlay}>
 					<Text style={styles.destinationTitle}>{destination.name}</Text>
-					<Text style={styles.destinationSubtitle}>{destination.description.split('.')[0]}</Text>
 				</BlurView>
 			</View>
 
 			<View style={styles.content}>
 				<Text style={styles.description}>{destination.description}</Text>
-				
+
 				<View style={styles.pillsContainer}>
-					<InfoPill 
-						icon="📍" 
-						text={formatCoordinate(destination.location.latitude, destination.location.longitude)} 
+					<InfoPill
+						icon="📍"
+						text={formatCoordinate(
+							destination.location.latitude,
+							destination.location.longitude,
+						)}
 					/>
-					<InfoPill 
-						icon="📅" 
-						text={`Best: ${getNextTravelDate()}`} 
-					/>
-					<InfoPill 
-						icon="🌟" 
-						text="4.8" 
-					/>
-					<InfoPill 
-						icon="❤️" 
-						text="2.4k" 
-					/>
+					<InfoPill icon="📅" text={`Best: ${getNextTravelDate()}`} />
+					<InfoPill icon="🌟" text="4.8" />
+					<InfoPill icon="❤" text="2.4k" />
 				</View>
 			</View>
 		</ScrollView>
@@ -102,31 +89,6 @@ const styles = StyleSheet.create((theme, rt) => ({
 		height: "100%",
 		borderBottomLeftRadius: 24,
 		borderBottomRightRadius: 24,
-	},
-	headerButtons: {
-		position: "absolute",
-		top: rt.insets.top + 16,
-		left: 0,
-		right: 0,
-		flexDirection: "row",
-		justifyContent: "space-between",
-		paddingHorizontal: 20,
-		borderRadius: 20,
-		marginHorizontal: 20,
-		paddingVertical: 8,
-	},
-	headerButton: {
-		width: 44,
-		height: 44,
-		borderRadius: 22,
-		backgroundColor: "rgba(255, 255, 255, 0.2)",
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	headerButtonText: {
-		fontSize: 20,
-		color: "white",
-		fontWeight: "600",
 	},
 	titleOverlay: {
 		position: "absolute",
@@ -184,4 +146,4 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontWeight: "600",
 		color: theme.colors.primary,
 	},
-})); 
+}));
