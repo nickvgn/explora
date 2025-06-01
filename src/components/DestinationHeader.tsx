@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text } from "react-native";
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
@@ -6,6 +6,7 @@ import Animated, {
 	useAnimatedStyle,
 	interpolate,
 	Extrapolation,
+	FadeIn,
 	type SharedValue,
 } from "react-native-reanimated";
 import { StyleSheet, UnistylesRuntime, withUnistyles } from "react-native-unistyles";
@@ -24,6 +25,8 @@ interface DestinationHeaderProps {
 }
 
 export default function DestinationHeader({ sv, destination }: DestinationHeaderProps) {
+	const [imageError, setImageError] = useState(false);
+	
 	const animatedImageStyle = useAnimatedStyle(() => {
 		return {
 			transform: [
@@ -66,13 +69,18 @@ export default function DestinationHeader({ sv, destination }: DestinationHeader
 		};
 	});
 
+	const fallbackImage = "https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=3869&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
 	return (
 		<View style={styles.heroSection}>
 			<Animated.View style={[styles.imageContainer, animatedImageStyle]}>
 				<Image source={{ uri: destination.image }} style={styles.heroImage} />
 			</Animated.View>
 
-			<Animated.View style={[styles.titleOverlay, animatedTextStyle]}>
+			<Animated.View 
+				style={[styles.titleOverlay, animatedTextStyle]}
+				entering={FadeIn.delay(150).duration(400)}
+			>
 				<ThemedBlurView intensity={30} style={styles.blurContainer}>
 					<Text style={styles.destinationTitle}>{destination.name}</Text>
 				</ThemedBlurView>
@@ -90,6 +98,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	imageContainer: {
 		width: rt.screen.width,
 		height: IMAGE_HEIGHT,
+		backgroundColor: theme.colors.primaryAccent,
 	},
 	heroImage: {
 		width: rt.screen.width,

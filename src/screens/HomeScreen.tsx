@@ -16,7 +16,7 @@ const ThemedBlurView = withUnistyles(BlurView, (theme, rt) => ({
 	tint: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
 }));
 
-function DestinationCard({ item }: { item: Destination }) {
+function DestinationCard({ item, index }: { item: Destination; index: number }) {
 	const navigation = useNavigation<NavigationProp>();
 
 	const handlePress = () => {
@@ -26,7 +26,10 @@ function DestinationCard({ item }: { item: Destination }) {
 	return (
 		<Pressable style={styles.card} onPress={handlePress}>
 			<View style={styles.imageContainer}>
-				<Image source={{ uri: item.image }} style={styles.cardImage} />
+				<Image 
+					source={{ uri: item.image }} 
+					style={styles.cardImage}
+				/>
 				<ThemedBlurView 
 					intensity={25}
 					style={styles.textOverlay}
@@ -45,9 +48,9 @@ export default function HomeScreen() {
 	return (
 		<FlashList
 			data={destinations}
-			renderItem={({ item }) => <DestinationCard item={item} />}
+			renderItem={({ item, index }) => <DestinationCard item={item} index={index} />}
+			keyExtractor={(item) => item.name}
 			numColumns={2}
-			estimatedItemSize={240}
 			contentInsetAdjustmentBehavior="automatic"
 			contentContainerStyle={styles.listContainer}
 			ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
@@ -57,8 +60,9 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create((theme, rt) => ({
 	listContainer: {
-		padding: 16,
+		paddingHorizontal: 8,
 		paddingTop: 16,
+		paddingBottom: 16,
 	},
 	card: {
 		borderRadius: 24,
@@ -78,6 +82,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		position: "relative",
 		width: (rt.screen.width - 48) / 2,
 		height: 200,
+		backgroundColor: theme.colors.primaryAccent,
 	},
 	cardImage: {
 		width: (rt.screen.width - 48) / 2,
