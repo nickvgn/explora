@@ -15,7 +15,6 @@ import Animated, {
 	Extrapolation,
 	type SharedValue
 } from "react-native-reanimated";
-import data from "../../data.json";
 import type { Destination, RootStackParamList } from "../navigation/types";
 
 const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
