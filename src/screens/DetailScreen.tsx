@@ -1,92 +1,24 @@
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { BlurView } from "expo-blur";
-import { Image } from "expo-image";
-import React, { useState } from "react";
-import { Pressable, Text, View, Alert } from "react-native";
+import React from "react";
+import { Pressable, Text, View } from "react-native";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import Animated, {
 	useAnimatedScrollHandler,
 	useSharedValue,
-	useAnimatedStyle,
-	interpolate,
-	Extrapolation,
 	type SharedValue,
 } from "react-native-reanimated";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
-import { check, request, openSettings, PERMISSIONS, RESULTS } from "react-native-permissions";
+import DestinationHeader from "../components/DestinationHeader";
+import TravelPlanningSection from "../components/TravelPlanningSection";
 import type { Destination, RootStackParamList } from "../navigation/types";
 import { useDestinationsStore } from "../store/destinationsStore";
-import NativeEventKit from "../../specs/NativeEventKit";
 
 const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
 
 type Props = NativeStackScreenProps<RootStackParamList, "Detail">;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
-
-type DestinationHeaderProps = {
-	sv: SharedValue<number>;
-	destination: Destination;
-};
-
-function DestinationHeader({ sv, destination }: DestinationHeaderProps) {
-	const animatedImageStyle = useAnimatedStyle(() => {
-		return {
-			transform: [
-				{
-					scale: interpolate(sv.value, [-50, 0], [1.3, 1], {
-						extrapolateLeft: "extend",
-						extrapolateRight: "clamp",
-					}),
-				},
-				{
-					translateY: interpolate(
-						sv.value,
-						[0, 50],
-						[0, 50],
-						Extrapolation.CLAMP,
-					),
-				},
-			],
-		};
-	});
-
-	const animatedTextStyle = useAnimatedStyle(() => {
-		return {
-			opacity: interpolate(
-				sv.value,
-				[0, IMAGE_HEIGHT * 0.25],
-				[1, 0],
-				Extrapolation.CLAMP,
-			),
-			transform: [
-				{
-					translateY: interpolate(
-						sv.value,
-						[0, IMAGE_HEIGHT * 0.25],
-						[0, 20],
-						Extrapolation.CLAMP,
-					),
-				},
-			],
-		};
-	});
-
-	return (
-		<View style={styles.heroSection}>
-			<Animated.View style={[styles.imageContainer, animatedImageStyle]}>
-				<Image source={{ uri: destination.image }} style={styles.heroImage} />
-			</Animated.View>
-
-			<Animated.View style={[styles.titleOverlay, animatedTextStyle]}>
-				<BlurView intensity={30} style={styles.blurContainer}>
-					<Text style={styles.destinationTitle}>{destination.name}</Text>
-				</BlurView>
-			</Animated.View>
-		</View>
-	);
-}
 
 function InfoPill({ icon, text }: { icon: string; text: string }) {
 	return (
@@ -100,13 +32,13 @@ function InfoPill({ icon, text }: { icon: string; text: string }) {
 export default function DetailScreen({ route }: Props) {
 	const navigation = useNavigation<NavigationProp>();
 	const { destination: routeDestination } = route.params;
-	
+
 	// Get the current destination from store (with potential eventId)
-	const currentDestination = useDestinationsStore(state => state.getDestination(routeDestination.name));
-	const setEventId = useDestinationsStore(state => state.setEventId);
-	const removeEventId = useDestinationsStore(state => state.removeEventId);
-	
-	const [isCalendarLoading, setIsCalendarLoading] = useState(false);
+	const currentDestination = useDestinationsStore((state) =>
+		state.getDestination(routeDestination.name),
+	);
+	const setEventId = useDestinationsStore((state) => state.setEventId);
+	const removeEventId = useDestinationsStore((state) => state.removeEventId);
 
 	const translationY = useSharedValue(0);
 	const scrollHandler = useAnimatedScrollHandler((event) => {
@@ -127,103 +59,6 @@ export default function DetailScreen({ route }: Props) {
 			day: "numeric",
 		});
 	};
-
-	const getTravelDateRange = () => {
-		const startDate = new Date(destination.suggestedTravelDates[0]);
-		const endDate = new Date(destination.suggestedTravelDates[1]);
-		return `${startDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${endDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
-	};
-
-	async function checkCalendarPermission(): Promise<boolean> {
-		const permissionStatus = await check(PERMISSIONS.IOS.CALENDARS);
-		
-		switch (permissionStatus) {
-			case RESULTS.GRANTED:
-			case RESULTS.LIMITED:
-				return true;
-				
-			case RESULTS.DENIED: {
-				const requestResult = await request(PERMISSIONS.IOS.CALENDARS);
-				return requestResult === RESULTS.GRANTED;
-			}
-				
-			case RESULTS.BLOCKED:
-				Alert.alert(
-					"Calendar Access Denied",
-					"Please enable calendar access in Settings to create travel reminders.",
-					[
-						{ text: "Cancel", style: "cancel" },
-						{ text: "Open Settings", onPress: () => openSettings() }
-					]
-				);
-				return false;
-				
-			case RESULTS.UNAVAILABLE:
-				Alert.alert("Error", "Calendar is not available on this device");
-				return false;
-				
-			default:
-				return false;
-		}
-	}
-
-	function createCalendarEvent() {
-		const startDate = destination.suggestedTravelDates[0];
-		const endDate = destination.suggestedTravelDates[1];
-		const location = `${destination.name} (${formatCoordinate(destination.location.latitude, destination.location.longitude)})`;
-		
-		const eventId = NativeEventKit.createEvent(
-			`Travel to ${destination.name}`,
-			startDate,
-			endDate,
-			location,
-			destination.description,
-			1440 // 24 hours before
-		);
-		
-		if (!eventId) {
-			Alert.alert("Error", "Failed to create calendar event");
-			return;
-		}
-		
-		setEventId(destination.name, eventId);
-		Alert.alert("Success", "Travel event added to calendar");
-	}
-
-	function deleteCalendarEvent() {
-		if (!destination.eventId) return;
-		
-		const success = NativeEventKit.deleteEvent(destination.eventId);
-		
-		if (!success) {
-			Alert.alert("Error", "Failed to remove event from calendar");
-			return;
-		}
-		
-		removeEventId(destination.name);
-		Alert.alert("Success", "Travel event removed from calendar");
-	}
-
-	async function handleCalendarAction() {
-		setIsCalendarLoading(true);
-		
-		try {
-			if (destination.eventId) {
-				deleteCalendarEvent();
-				return;
-			}
-			
-			const hasPermission = await checkCalendarPermission();
-			if (!hasPermission) return;
-			
-			createCalendarEvent();
-		} catch (error) {
-			Alert.alert("Error", "Calendar operation failed");
-			console.error("Calendar error:", error);
-		} finally {
-			setIsCalendarLoading(false);
-		}
-	}
 
 	const mapRegion = {
 		latitude: destination.location.latitude,
@@ -261,45 +96,11 @@ export default function DetailScreen({ route }: Props) {
 
 				<Text style={styles.description}>{destination.description}</Text>
 
-				{/* Calendar Section */}
-				<View style={styles.calendarSection}>
-					<Text style={styles.sectionTitle}>Travel Planning</Text>
-					<View style={[
-						styles.calendarCard,
-						destination.eventId && styles.calendarCardAdded
-					]}>
-						<View style={styles.calendarInfo}>
-							<Text style={styles.calendarTitle}>Suggested Travel Dates</Text>
-							<Text style={styles.calendarDates}>{getTravelDateRange()}</Text>
-							{destination.eventId && (
-								<View style={styles.calendarStatusBadge}>
-									<Text style={styles.calendarStatusText}>✓ Added to calendar</Text>
-								</View>
-							)}
-						</View>
-						<Pressable 
-							style={[
-								styles.calendarButton,
-								destination.eventId && styles.calendarButtonRemove,
-								isCalendarLoading && styles.calendarButtonDisabled
-							]}
-							onPress={handleCalendarAction}
-							disabled={isCalendarLoading}
-						>
-							<Text style={[
-								styles.calendarButtonText,
-								destination.eventId && styles.calendarButtonTextRemove
-							]}>
-								{isCalendarLoading 
-									? "Loading..." 
-									: destination.eventId 
-										? "Remove" 
-										: "Add to Calendar"
-								}
-							</Text>
-						</Pressable>
-					</View>
-				</View>
+				<TravelPlanningSection
+					destinationName={destination.name}
+					eventId={destination.eventId}
+					suggestedDates={destination.suggestedTravelDates}
+				/>
 
 				<View style={styles.mapSection}>
 					<Text style={styles.sectionTitle}>Location</Text>
@@ -335,39 +136,6 @@ const styles = StyleSheet.create((theme, rt) => ({
 	container: {
 		flex: 1,
 		backgroundColor: theme.colors.background,
-	},
-	heroSection: {
-		position: "relative",
-		width: rt.screen.width,
-		height: IMAGE_HEIGHT,
-	},
-	imageContainer: {
-		width: rt.screen.width,
-		height: IMAGE_HEIGHT,
-	},
-	heroImage: {
-		width: rt.screen.width,
-		height: IMAGE_HEIGHT,
-	},
-	titleOverlay: {
-		position: "absolute",
-		bottom: 24,
-		left: 20,
-		right: 20,
-	},
-	blurContainer: {
-		borderRadius: 20,
-		padding: 20,
-		overflow: "hidden",
-	},
-	destinationTitle: {
-		fontSize: rt.fontScale * 32,
-		fontWeight: "800",
-		color: "white",
-		marginBottom: 4,
-		textShadowColor: "rgba(0, 0, 0, 0.3)",
-		textShadowOffset: { width: 0, height: 1 },
-		textShadowRadius: 2,
 	},
 	content: {
 		padding: 20,
@@ -438,71 +206,6 @@ const styles = StyleSheet.create((theme, rt) => ({
 	mapOverlayText: {
 		fontSize: rt.fontScale * 16,
 		fontWeight: "600",
-		color: "white",
-	},
-	calendarSection: {
-		marginBottom: 24,
-	},
-	calendarCard: {
-		backgroundColor: theme.colors.secondary,
-		borderRadius: 20,
-		padding: 20,
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-	},
-	calendarCardAdded: {
-		backgroundColor: theme.colors.secondary,
-	},
-	calendarInfo: {
-		flex: 1,
-		marginRight: 16,
-	},
-	calendarTitle: {
-		fontSize: rt.fontScale * 18,
-		fontWeight: "700",
-		color: theme.colors.text,
-		marginBottom: 4,
-	},
-	calendarDates: {
-		fontSize: rt.fontScale * 16,
-		color: theme.colors.text,
-		fontWeight: "600",
-		marginBottom: 8,
-	},
-	calendarStatusBadge: {
-		backgroundColor: theme.colors.primary,
-		paddingHorizontal: 8,
-		paddingVertical: 4,
-		borderRadius: 8,
-		alignSelf: "flex-start",
-	},
-	calendarStatusText: {
-		fontSize: rt.fontScale * 14,
-		fontWeight: "600",
-		color: "white",
-	},
-	calendarButton: {
-		backgroundColor: theme.colors.primary,
-		paddingHorizontal: 20,
-		paddingVertical: 12,
-		borderRadius: 16,
-		minWidth: 140,
-		alignItems: "center",
-	},
-	calendarButtonRemove: {
-		backgroundColor: "#EF4444",
-	},
-	calendarButtonDisabled: {
-		backgroundColor: "rgba(156, 163, 175, 0.5)",
-	},
-	calendarButtonText: {
-		fontSize: rt.fontScale * 14,
-		fontWeight: "600",
-		color: "white",
-		textAlign: "center",
-	},
-	calendarButtonTextRemove: {
 		color: "white",
 	},
 }));
