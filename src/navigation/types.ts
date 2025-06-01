@@ -1,6 +1,6 @@
-import data from "../../data.json";
+import type { DestinationWithEvent } from "../store/destinationsStore";
 
-export type Destination = (typeof data.destinations)[0];
+export type Destination = DestinationWithEvent;
 
 export type RootStackParamList = {
 	Home: undefined;

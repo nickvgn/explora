@@ -3,8 +3,8 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
-import React from "react";
-import { Pressable, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Pressable, Text, View, Alert } from "react-native";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import Animated, {
 	useAnimatedScrollHandler,
@@ -16,6 +16,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import type { Destination, RootStackParamList } from "../navigation/types";
+import { useDestinationsStore } from "../store/destinationsStore";
+import NativeEventKit from "../../specs/NativeEventKit";
 
 const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
 
@@ -96,12 +98,22 @@ function InfoPill({ icon, text }: { icon: string; text: string }) {
 
 export default function DetailScreen({ route }: Props) {
 	const navigation = useNavigation<NavigationProp>();
-	const { destination } = route.params;
+	const { destination: routeDestination } = route.params;
+	
+	// Get the current destination from store (with potential eventId)
+	const currentDestination = useDestinationsStore(state => state.getDestination(routeDestination.name));
+	const setEventId = useDestinationsStore(state => state.setEventId);
+	const removeEventId = useDestinationsStore(state => state.removeEventId);
+	
+	const [isCalendarLoading, setIsCalendarLoading] = useState(false);
 
 	const translationY = useSharedValue(0);
 	const scrollHandler = useAnimatedScrollHandler((event) => {
 		translationY.value = event.contentOffset.y;
 	});
+
+	// Fallback to route destination if not found in store
+	const destination = currentDestination || routeDestination;
 
 	const formatCoordinate = (lat: number, lng: number) => {
 		return `${Math.abs(lat).toFixed(4)}°${lat >= 0 ? "N" : "S"}, ${Math.abs(lng).toFixed(4)}°${lng >= 0 ? "E" : "W"}`;
@@ -113,6 +125,55 @@ export default function DetailScreen({ route }: Props) {
 			month: "short",
 			day: "numeric",
 		});
+	};
+
+	const getTravelDateRange = () => {
+		const startDate = new Date(destination.suggestedTravelDates[0]);
+		const endDate = new Date(destination.suggestedTravelDates[1]);
+		return `${startDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${endDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
+	};
+
+	const handleCalendarAction = async () => {
+		setIsCalendarLoading(true);
+		
+		try {
+			if (destination.eventId) {
+				// Delete existing event
+				const success = await NativeEventKit.deleteEvent(destination.eventId);
+				if (success) {
+					removeEventId(destination.name);
+					Alert.alert("Success", "Travel event removed from calendar");
+				} else {
+					Alert.alert("Error", "Failed to remove event from calendar");
+				}
+			} else {
+				// Create new event
+				const startDate = destination.suggestedTravelDates[0];
+				const endDate = destination.suggestedTravelDates[1];
+				const location = `${destination.name} (${formatCoordinate(destination.location.latitude, destination.location.longitude)})`;
+				
+				const eventId = await NativeEventKit.createEvent(
+					`Travel to ${destination.name}`,
+					startDate,
+					endDate,
+					location,
+					destination.description,
+					1440 // 24 hours before
+				);
+				
+				if (eventId) {
+					setEventId(destination.name, eventId);
+					Alert.alert("Success", "Travel event added to calendar");
+				} else {
+					Alert.alert("Error", "Failed to create calendar event");
+				}
+			}
+		} catch (error) {
+			Alert.alert("Error", "Calendar operation failed");
+			console.error("Calendar error:", error);
+		} finally {
+			setIsCalendarLoading(false);
+		}
 	};
 
 	const mapRegion = {
@@ -150,6 +211,41 @@ export default function DetailScreen({ route }: Props) {
 				</View>
 
 				<Text style={styles.description}>{destination.description}</Text>
+
+				{/* Calendar Section */}
+				<View style={styles.calendarSection}>
+					<Text style={styles.sectionTitle}>Travel Planning</Text>
+					<View style={styles.calendarCard}>
+						<View style={styles.calendarInfo}>
+							<Text style={styles.calendarTitle}>Suggested Travel Dates</Text>
+							<Text style={styles.calendarDates}>{getTravelDateRange()}</Text>
+							{destination.eventId && (
+								<Text style={styles.calendarStatus}>✅ Added to calendar</Text>
+							)}
+						</View>
+						<Pressable 
+							style={[
+								styles.calendarButton,
+								destination.eventId && styles.calendarButtonRemove,
+								isCalendarLoading && styles.calendarButtonDisabled
+							]}
+							onPress={handleCalendarAction}
+							disabled={isCalendarLoading}
+						>
+							<Text style={[
+								styles.calendarButtonText,
+								destination.eventId && styles.calendarButtonTextRemove
+							]}>
+								{isCalendarLoading 
+									? "Loading..." 
+									: destination.eventId 
+										? "Remove from Calendar" 
+										: "Add to Calendar"
+								}
+							</Text>
+						</Pressable>
+					</View>
+				</View>
 
 				<View style={styles.mapSection}>
 					<Text style={styles.sectionTitle}>Location</Text>
@@ -288,6 +384,61 @@ const styles = StyleSheet.create((theme, rt) => ({
 	mapOverlayText: {
 		fontSize: rt.fontScale * 16,
 		fontWeight: "600",
+		color: "white",
+	},
+	calendarSection: {
+		marginBottom: 24,
+	},
+	calendarCard: {
+		backgroundColor: theme.colors.secondary,
+		borderRadius: 20,
+		padding: 20,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+	calendarInfo: {
+		flex: 1,
+		marginRight: 16,
+	},
+	calendarTitle: {
+		fontSize: rt.fontScale * 18,
+		fontWeight: "700",
+		color: theme.colors.text,
+		marginBottom: 4,
+	},
+	calendarDates: {
+		fontSize: rt.fontScale * 16,
+		color: theme.colors.text,
+		fontWeight: "600",
+	},
+	calendarStatus: {
+		fontSize: rt.fontScale * 14,
+		fontWeight: "600",
+		color: theme.colors.primary,
+		marginTop: 4,
+	},
+	calendarButton: {
+		backgroundColor: theme.colors.primary,
+		paddingHorizontal: 20,
+		paddingVertical: 12,
+		borderRadius: 16,
+		minWidth: 140,
+		alignItems: "center",
+	},
+	calendarButtonRemove: {
+		backgroundColor: "#EF4444",
+	},
+	calendarButtonDisabled: {
+		backgroundColor: "rgba(156, 163, 175, 0.5)",
+	},
+	calendarButtonText: {
+		fontSize: rt.fontScale * 14,
+		fontWeight: "600",
+		color: "white",
+		textAlign: "center",
+	},
+	calendarButtonTextRemove: {
 		color: "white",
 	},
 }));

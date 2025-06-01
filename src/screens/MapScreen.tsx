@@ -1,7 +1,8 @@
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
+import { View } from "react-native";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
-import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
+import { StyleSheet } from "react-native-unistyles";
 import type { RootStackParamList } from "../navigation/types";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Map">;
@@ -9,31 +10,32 @@ type Props = NativeStackScreenProps<RootStackParamList, "Map">;
 export default function MapScreen({ route }: Props) {
 	const { destination } = route.params;
 
-	const region = {
+	const mapRegion = {
 		latitude: destination.location.latitude,
 		longitude: destination.location.longitude,
-		latitudeDelta: 0.01,
-		longitudeDelta: 0.01,
+		latitudeDelta: 0.1,
+		longitudeDelta: 0.1,
 	};
 
 	return (
-		<MapView
-			style={styles.map}
-			provider={PROVIDER_DEFAULT}
-			region={region}
-			showsUserLocation={true}
-			showsMyLocationButton={true}
-			mapType="terrain"
-		>
-			<Marker
-				coordinate={{
-					latitude: destination.location.latitude,
-					longitude: destination.location.longitude,
-				}}
-				title={destination.name}
-				description="Travel destination"
-			/>
-		</MapView>
+		<View style={styles.container}>
+			<MapView
+				style={styles.map}
+				provider={PROVIDER_DEFAULT}
+				region={mapRegion}
+				showsUserLocation
+				showsMyLocationButton
+			>
+				<Marker
+					coordinate={{
+						latitude: destination.location.latitude,
+						longitude: destination.location.longitude,
+					}}
+					title={destination.name}
+					description={destination.description}
+				/>
+			</MapView>
+		</View>
 	);
 }
 
@@ -42,5 +44,8 @@ const styles = StyleSheet.create((theme, rt) => ({
 		flex: 1,
 		width: rt.screen.width,
 		height: rt.screen.height,
+	},
+	container: {
+		flex: 1,
 	},
 })); 

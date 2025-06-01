@@ -3,11 +3,11 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FlashList } from "@shopify/flash-list";
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
-import React from "react";
+import React, { useMemo } from "react";
 import { Pressable, Text, View } from "react-native";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
-import data from "../../data.json";
 import type { Destination, RootStackParamList } from "../navigation/types";
+import { useDestinationsStore } from "../store/destinationsStore";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -31,9 +31,12 @@ function DestinationCard({ item }: { item: Destination }) {
 }
 
 export default function HomeScreen() {
+	const destinationsRecord = useDestinationsStore(state => state.destinations);
+	const destinations = useMemo(() => Object.values(destinationsRecord), [destinationsRecord]);
+
 	return (
 		<FlashList
-			data={data.destinations}
+			data={destinations}
 			renderItem={({ item }) => <DestinationCard item={item} />}
 			numColumns={2}
 			estimatedItemSize={240}
