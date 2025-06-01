@@ -5,6 +5,7 @@ import { UnistylesRuntime } from "react-native-unistyles";
 import HomeScreen from "../screens/HomeScreen";
 import DetailScreen from "../screens/DetailScreen";
 import MapScreen from "../screens/MapScreen";
+import ThemeButton from "../components/ThemeButton";
 
 const RootStack = createNativeStackNavigator({
 	screens: {
@@ -16,8 +17,9 @@ const RootStack = createNativeStackNavigator({
 				headerTransparent: true,
 				headerBlurEffect: "regular",
 				headerShadowVisible: false,
+				headerRight: () => <ThemeButton />,
 				contentStyle: {
-					backgroundColor: UnistylesRuntime.getTheme().colors.background,
+					backgroundColor: 'transparent',
 				},
 				headerSearchBarOptions: {
 					placeholder: "Search",

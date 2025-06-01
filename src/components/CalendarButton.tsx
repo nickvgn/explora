@@ -113,7 +113,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		justifyContent: "center",
 	},
 	calendarButtonRemove: {
-		backgroundColor: "#EF4444",
+		backgroundColor: theme.colors.destructive,
 	},
 	calendarButtonDisabled: {
 		backgroundColor: "rgba(156, 163, 175, 0.5)",

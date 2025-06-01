@@ -161,11 +161,11 @@ const styles = StyleSheet.create((theme, rt) => ({
 	sectionTitle: {
 		fontSize: rt.fontScale * 24,
 		fontWeight: "800",
-		color: theme.colors.text,
+		color: theme.colors.primaryText,
 		marginBottom: 12,
 	},
 	calendarCard: {
-		backgroundColor: theme.colors.secondary,
+		backgroundColor: theme.colors.primaryAccent,
 		borderRadius: 20,
 		padding: 20,
 		flexDirection: "row",
@@ -174,7 +174,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		minHeight: 120,
 	},
 	calendarCardAdded: {
-		backgroundColor: theme.colors.secondary,
+		backgroundColor: theme.colors.primaryAccent,
 	},
 	calendarInfo: {
 		flex: 1,
@@ -183,12 +183,12 @@ const styles = StyleSheet.create((theme, rt) => ({
 	calendarTitle: {
 		fontSize: rt.fontScale * 18,
 		fontWeight: "700",
-		color: theme.colors.text,
+		color: theme.colors.primaryText,
 		marginBottom: 4,
 	},
 	calendarDates: {
 		fontSize: rt.fontScale * 16,
-		color: theme.colors.text,
+		color: theme.colors.primaryText,
 		fontWeight: "600",
 		marginBottom: 8,
 	},

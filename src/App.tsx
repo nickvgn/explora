@@ -1,5 +1,5 @@
 import React from "react";
-import "./styles/unistyles";
+import "./theme/unistyles";
 import { Navigation } from "./navigation/root-navigator";
 
 export default function App() {

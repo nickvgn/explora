@@ -147,7 +147,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	description: {
 		fontSize: rt.fontScale * 16,
 		lineHeight: rt.fontScale * 24,
-		color: theme.colors.text,
+		color: theme.colors.primaryText,
 		marginBottom: 24,
 	},
 	pillsContainer: {
@@ -159,7 +159,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	pill: {
 		flexDirection: "row",
 		alignItems: "center",
-		backgroundColor: theme.colors.secondary,
+		backgroundColor: theme.colors.primaryAccent,
 		paddingHorizontal: 16,
 		paddingVertical: 10,
 		borderRadius: 20,
@@ -167,11 +167,12 @@ const styles = StyleSheet.create((theme, rt) => ({
 	pillIcon: {
 		fontSize: 16,
 		marginRight: 8,
+		color: theme.colors.primaryText,
 	},
 	pillText: {
 		fontSize: rt.fontScale * 14,
 		fontWeight: "600",
-		color: theme.colors.primary,
+		color: theme.colors.primaryText,
 	},
 	mapSection: {
 		marginBottom: 24,
@@ -179,7 +180,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	sectionTitle: {
 		fontSize: rt.fontScale * 24,
 		fontWeight: "800",
-		color: theme.colors.text,
+		color: theme.colors.primaryText,
 		marginBottom: 12,
 	},
 	mapPreview: {
@@ -187,7 +188,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 		height: 150,
 		borderRadius: 20,
 		overflow: "hidden",
-		backgroundColor: theme.colors.secondary,
+		backgroundColor: theme.colors.primaryAccent,
 	},
 	mapView: {
 		width: "100%",
