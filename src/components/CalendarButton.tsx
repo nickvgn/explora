@@ -1,3 +1,4 @@
+import { AntDesign } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, {
@@ -6,14 +7,13 @@ import Animated, {
 	withSpring,
 } from "react-native-reanimated";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
-import { AntDesign } from "@expo/vector-icons";
 
 type CalendarButtonProps = {
 	hasEvent: boolean;
 	isLoading: boolean;
 	onPress: () => void;
 	onConfirmation: (isRemove: boolean) => void;
-}
+};
 
 export default function CalendarButton({
 	hasEvent,
@@ -21,25 +21,30 @@ export default function CalendarButton({
 	onPress,
 	onConfirmation,
 }: CalendarButtonProps) {
-	const [confirmationType, setConfirmationType] = useState<'none' | 'add' | 'remove'>('none');
-	
+	const [confirmationType, setConfirmationType] = useState<
+		"none" | "add" | "remove"
+	>("none");
+
 	const confirmationScale = useSharedValue(0);
 	const confirmationOpacity = useSharedValue(0);
 
 	function showConfirmationAnimation(isRemove = false) {
-		setConfirmationType(isRemove ? 'remove' : 'add');
-		
+		setConfirmationType(isRemove ? "remove" : "add");
+
 		confirmationScale.value = 0;
 		confirmationOpacity.value = 0;
-		
+
 		confirmationScale.value = withSpring(1, { damping: 12, stiffness: 350 });
 		confirmationOpacity.value = withSpring(1, { damping: 12, stiffness: 350 });
-		
+
 		setTimeout(() => {
 			confirmationScale.value = withSpring(0, { damping: 15, stiffness: 300 });
-			confirmationOpacity.value = withSpring(0, { damping: 15, stiffness: 300 });
+			confirmationOpacity.value = withSpring(0, {
+				damping: 15,
+				stiffness: 300,
+			});
 			setTimeout(() => {
-				setConfirmationType('none');
+				setConfirmationType("none");
 			}, 200);
 		}, 800);
 	}
@@ -57,13 +62,11 @@ export default function CalendarButton({
 		};
 	});
 
-	if (confirmationType !== 'none') {
+	if (confirmationType !== "none") {
 		return (
-			<View 
-				style={styles.calendarButton(confirmationType)}
-			>
+			<View style={styles.calendarButton(confirmationType)}>
 				<Animated.View style={confirmationAnimatedStyle}>
-					{confirmationType === 'add' ? (
+					{confirmationType === "add" ? (
 						<AntDesign name="checkcircle" size={24} color="white" />
 					) : (
 						<AntDesign name="closecircle" size={24} color="white" />
@@ -74,25 +77,22 @@ export default function CalendarButton({
 	}
 
 	return (
-		<Pressable 
+		<Pressable
 			style={[
 				styles.calendarButton(),
 				hasEvent && styles.calendarButtonRemove,
-				isLoading && styles.calendarButtonDisabled
+				isLoading && styles.calendarButtonDisabled,
 			]}
 			onPress={handlePress}
 			disabled={isLoading}
 		>
-			<Text style={[
-				styles.calendarButtonText,
-				hasEvent && styles.calendarButtonTextRemove
-			]}>
-				{isLoading 
-					? "Loading..." 
-					: hasEvent 
-						? "Remove" 
-						: "Add to Calendar"
-				}
+			<Text
+				style={[
+					styles.calendarButtonText,
+					hasEvent && styles.calendarButtonTextRemove,
+				]}
+			>
+				{isLoading ? "Loading..." : hasEvent ? "Remove" : "Add to Calendar"}
 			</Text>
 		</Pressable>
 	);
@@ -101,8 +101,8 @@ export default function CalendarButton({
 const styles = StyleSheet.create((theme, rt) => ({
 	calendarButton: (confirmationType?: string) => ({
 		backgroundColor: (() => {
-			if (confirmationType === 'remove') return theme.colors.destructive;
-			if (confirmationType === 'add') return theme.colors.success;
+			if (confirmationType === "remove") return theme.colors.destructive;
+			if (confirmationType === "add") return theme.colors.success;
 			return theme.colors.primary;
 		})(),
 		paddingHorizontal: 20,
@@ -128,4 +128,4 @@ const styles = StyleSheet.create((theme, rt) => ({
 	calendarButtonTextRemove: {
 		color: "white",
 	},
-})); 
+}));

@@ -27,4 +27,3 @@ StyleSheet.configure({
 });
 
 export { lightTheme, darkTheme, breakpoints };
-

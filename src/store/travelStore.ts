@@ -23,7 +23,7 @@ type TravelStore = {
 	removeEvent: (eventId: string) => void;
 	getEventByDestination: (destinationName: string) => string | undefined;
 	removeEventByDestination: (destinationName: string) => void;
-}
+};
 
 export const useTravelStore = create<TravelStore>()(
 	persist(

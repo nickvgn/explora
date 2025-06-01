@@ -1,3 +1,4 @@
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { BlurView } from "expo-blur";
@@ -5,7 +6,6 @@ import { Image } from "expo-image";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { StyleSheet, withUnistyles } from "react-native-unistyles";
-import { AntDesign } from "@expo/vector-icons";
 import type { Destination, RootStackParamList } from "../navigation/types";
 import { useTravelStore } from "../store/travelStore";
 
@@ -26,7 +26,9 @@ interface DestinationCardProps {
 
 export default function DestinationCard({ item, index }: DestinationCardProps) {
 	const navigation = useNavigation<NavigationProp>();
-	const eventId = useTravelStore(state => state.getEventByDestination(item.name));
+	const eventId = useTravelStore((state) =>
+		state.getEventByDestination(item.name),
+	);
 
 	const handlePress = () => {
 		navigation.navigate("Detail", { destination: item });
@@ -35,8 +37,8 @@ export default function DestinationCard({ item, index }: DestinationCardProps) {
 	return (
 		<Pressable style={styles.card} onPress={handlePress}>
 			<View style={styles.imageContainer}>
-				<Image 
-					source={{ uri: item.image }} 
+				<Image
+					source={{ uri: item.image }}
 					style={styles.cardImage}
 					key={item.name}
 					cachePolicy="memory-disk"
@@ -115,4 +117,4 @@ const styles = StyleSheet.create((theme, rt) => ({
 		textShadowOffset: { width: 0, height: 1 },
 		textShadowRadius: 2,
 	},
-})); 
+}));

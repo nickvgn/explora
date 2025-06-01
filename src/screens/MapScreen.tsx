@@ -9,7 +9,9 @@ type Props = NativeStackScreenProps<RootStackParamList, "Map">;
 
 // Create a themed MapView component
 const ThemedMapView = withUnistyles(MapView, (theme, rt) => ({
-	userInterfaceStyle: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
+	userInterfaceStyle: (rt.themeName === "dark" ? "dark" : "light") as
+		| "dark"
+		| "light",
 }));
 
 export default function MapScreen({ route }: Props) {
@@ -53,4 +55,4 @@ const styles = StyleSheet.create((theme, rt) => ({
 	container: {
 		flex: 1,
 	},
-})); 
+}));

@@ -64,4 +64,3 @@ export function Navigation() {
 		</NavigationContainer>
 	);
 }
-

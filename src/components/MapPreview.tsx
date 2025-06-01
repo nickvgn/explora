@@ -4,7 +4,9 @@ import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import { StyleSheet, withUnistyles } from "react-native-unistyles";
 
 const ThemedMapView = withUnistyles(MapView, (_, rt) => ({
-	userInterfaceStyle: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
+	userInterfaceStyle: (rt.themeName === "dark" ? "dark" : "light") as
+		| "dark"
+		| "light",
 }));
 
 interface MapPreviewProps {
@@ -14,7 +16,12 @@ interface MapPreviewProps {
 	onPress: () => void;
 }
 
-export default function MapPreview({ latitude, longitude, title, onPress }: MapPreviewProps) {
+export default function MapPreview({
+	latitude,
+	longitude,
+	title,
+	onPress,
+}: MapPreviewProps) {
 	const mapRegion = {
 		latitude,
 		longitude,
@@ -57,4 +64,4 @@ const styles = StyleSheet.create((theme) => ({
 		width: "100%",
 		height: 150,
 	},
-})); 
+}));

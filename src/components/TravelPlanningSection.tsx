@@ -1,10 +1,16 @@
 import React, { useState, useCallback } from "react";
-import { Text, View, Alert } from "react-native";
+import { Alert, Text, View } from "react-native";
+import {
+	PERMISSIONS,
+	RESULTS,
+	check,
+	openSettings,
+	request,
+} from "react-native-permissions";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
-import { check, request, openSettings, PERMISSIONS, RESULTS } from "react-native-permissions";
-import CalendarButton from "./CalendarButton";
 import NativeEventKit from "../../specs/NativeEventKit";
 import { useTravelStore } from "../store/travelStore";
+import CalendarButton from "./CalendarButton";
 
 interface TravelPlanningSectionProps {
 	destinationName: string;
@@ -18,10 +24,14 @@ function TravelPlanningSection({
 	suggestedDates,
 }: TravelPlanningSectionProps) {
 	const [isCalendarLoading, setIsCalendarLoading] = useState(false);
-	
-	const eventId = useTravelStore(state => state.getEventByDestination(destinationName));
-	const addEvent = useTravelStore(state => state.addEvent);
-	const removeEventByDestination = useTravelStore(state => state.removeEventByDestination);
+
+	const eventId = useTravelStore((state) =>
+		state.getEventByDestination(destinationName),
+	);
+	const addEvent = useTravelStore((state) => state.addEvent);
+	const removeEventByDestination = useTravelStore(
+		(state) => state.removeEventByDestination,
+	);
 
 	const getTravelDateRange = useCallback(() => {
 		const startDate = new Date(suggestedDates[0]);
@@ -31,32 +41,32 @@ function TravelPlanningSection({
 
 	const checkCalendarPermission = useCallback(async (): Promise<boolean> => {
 		const permissionStatus = await check(PERMISSIONS.IOS.CALENDARS);
-		
+
 		switch (permissionStatus) {
 			case RESULTS.GRANTED:
 			case RESULTS.LIMITED:
 				return true;
-				
+
 			case RESULTS.DENIED: {
 				const requestResult = await request(PERMISSIONS.IOS.CALENDARS);
 				return requestResult === RESULTS.GRANTED;
 			}
-				
+
 			case RESULTS.BLOCKED:
 				Alert.alert(
 					"Calendar Access Denied",
 					"Please enable calendar access in Settings to create travel reminders.",
 					[
 						{ text: "Cancel", style: "cancel" },
-						{ text: "Open Settings", onPress: () => openSettings() }
-					]
+						{ text: "Open Settings", onPress: () => openSettings() },
+					],
 				);
 				return false;
-				
+
 			case RESULTS.UNAVAILABLE:
 				Alert.alert("Error", "Calendar is not available on this device");
 				return false;
-				
+
 			default:
 				return false;
 		}
@@ -66,40 +76,40 @@ function TravelPlanningSection({
 		const startDate = suggestedDates[0];
 		const endDate = suggestedDates[1];
 		const locationString = destinationName;
-		
+
 		const newEventId = NativeEventKit.createEvent(
 			`Travel to ${destinationName}`,
 			startDate,
 			endDate,
 			locationString,
 			destinationDescription,
-			1440
+			1440,
 		);
-		
+
 		if (!newEventId) {
 			Alert.alert("Error", "Failed to create calendar event");
 			return;
 		}
-		
+
 		addEvent(newEventId, destinationName);
 	}, [destinationName, suggestedDates, destinationDescription, addEvent]);
 
 	const deleteCalendarEvent = useCallback(() => {
 		if (!eventId) return;
-		
+
 		const success = NativeEventKit.deleteEvent(eventId);
-		
+
 		if (!success) {
 			Alert.alert("Error", "Failed to remove event from calendar");
 			return;
 		}
-		
+
 		removeEventByDestination(destinationName);
 	}, [eventId, destinationName, removeEventByDestination]);
 
 	const handleCalendarAction = useCallback(async () => {
 		setIsCalendarLoading(true);
-		
+
 		try {
 			if (eventId) {
 				deleteCalendarEvent();
@@ -115,7 +125,12 @@ function TravelPlanningSection({
 		} finally {
 			setIsCalendarLoading(false);
 		}
-	}, [eventId, deleteCalendarEvent, checkCalendarPermission, createCalendarEvent]);
+	}, [
+		eventId,
+		deleteCalendarEvent,
+		checkCalendarPermission,
+		createCalendarEvent,
+	]);
 
 	return (
 		<View style={styles.calendarSection}>
@@ -124,10 +139,12 @@ function TravelPlanningSection({
 				<View style={styles.calendarInfo}>
 					<Text style={styles.calendarTitle}>Suggested Travel Dates</Text>
 					<Text style={styles.calendarDates}>{getTravelDateRange()}</Text>
-					<View style={[
-						styles.calendarStatusBadge,
-						!eventId && styles.calendarStatusBadgeHidden
-					]}>
+					<View
+						style={[
+							styles.calendarStatusBadge,
+							!eventId && styles.calendarStatusBadgeHidden,
+						]}
+					>
 						<Text style={styles.calendarStatusText}>✓ Added to calendar</Text>
 					</View>
 				</View>
@@ -195,4 +212,4 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontWeight: "600",
 		color: "white",
 	},
-})); 
+}));

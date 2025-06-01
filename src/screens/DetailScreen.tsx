@@ -30,9 +30,11 @@ export default function DetailScreen({ route }: Props) {
 	});
 
 	const handleMapPress = () => {
+		const location = destination.location;
+
 		navigation.navigate("Map", {
-			latitude: destination.location.latitude,
-			longitude: destination.location.longitude,
+			latitude: location.latitude,
+			longitude: location.longitude,
 		});
 	};
 
