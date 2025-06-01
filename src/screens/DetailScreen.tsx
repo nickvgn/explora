@@ -134,87 +134,96 @@ export default function DetailScreen({ route }: Props) {
 		return `${startDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${endDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
 	};
 
-	const handleCalendarAction = async () => {
+	async function checkCalendarPermission(): Promise<boolean> {
+		const permissionStatus = await check(PERMISSIONS.IOS.CALENDARS);
+		
+		switch (permissionStatus) {
+			case RESULTS.GRANTED:
+			case RESULTS.LIMITED:
+				return true;
+				
+			case RESULTS.DENIED: {
+				const requestResult = await request(PERMISSIONS.IOS.CALENDARS);
+				return requestResult === RESULTS.GRANTED;
+			}
+				
+			case RESULTS.BLOCKED:
+				Alert.alert(
+					"Calendar Access Denied",
+					"Please enable calendar access in Settings to create travel reminders.",
+					[
+						{ text: "Cancel", style: "cancel" },
+						{ text: "Open Settings", onPress: () => openSettings() }
+					]
+				);
+				return false;
+				
+			case RESULTS.UNAVAILABLE:
+				Alert.alert("Error", "Calendar is not available on this device");
+				return false;
+				
+			default:
+				return false;
+		}
+	}
+
+	function createCalendarEvent() {
+		const startDate = destination.suggestedTravelDates[0];
+		const endDate = destination.suggestedTravelDates[1];
+		const location = `${destination.name} (${formatCoordinate(destination.location.latitude, destination.location.longitude)})`;
+		
+		const eventId = NativeEventKit.createEvent(
+			`Travel to ${destination.name}`,
+			startDate,
+			endDate,
+			location,
+			destination.description,
+			1440 // 24 hours before
+		);
+		
+		if (!eventId) {
+			Alert.alert("Error", "Failed to create calendar event");
+			return;
+		}
+		
+		setEventId(destination.name, eventId);
+		Alert.alert("Success", "Travel event added to calendar");
+	}
+
+	function deleteCalendarEvent() {
+		if (!destination.eventId) return;
+		
+		const success = NativeEventKit.deleteEvent(destination.eventId);
+		
+		if (!success) {
+			Alert.alert("Error", "Failed to remove event from calendar");
+			return;
+		}
+		
+		removeEventId(destination.name);
+		Alert.alert("Success", "Travel event removed from calendar");
+	}
+
+	async function handleCalendarAction() {
 		setIsCalendarLoading(true);
 		
 		try {
 			if (destination.eventId) {
-				// Delete existing event (no permission needed to delete)
-				const success = await NativeEventKit.deleteEvent(destination.eventId);
-				if (success) {
-					removeEventId(destination.name);
-					Alert.alert("Success", "Travel event removed from calendar");
-				} else {
-					Alert.alert("Error", "Failed to remove event from calendar");
-				}
-			} else {
-				// Check calendar permission first
-				const permissionStatus = await check(PERMISSIONS.IOS.CALENDARS);
-				
-				let hasPermission = false;
-				
-				switch (permissionStatus) {
-					case RESULTS.GRANTED:
-						hasPermission = true;
-						break;
-					case RESULTS.DENIED:
-						// Request permission
-						const requestResult = await request(PERMISSIONS.IOS.CALENDARS);
-						hasPermission = requestResult === RESULTS.GRANTED;
-						break;
-					case RESULTS.BLOCKED:
-						Alert.alert(
-							"Calendar Access Denied",
-							"Please enable calendar access in Settings to create travel reminders.",
-							[
-								{ text: "Cancel", style: "cancel" },
-								{ text: "Open Settings", onPress: () => {
-									openSettings();
-								}}
-							]
-						);
-						return;
-					case RESULTS.UNAVAILABLE:
-						Alert.alert("Error", "Calendar is not available on this device");
-						return;
-					case RESULTS.LIMITED:
-						hasPermission = true;
-						break;
-				}
-				
-				if (!hasPermission) {
-					Alert.alert("Permission Required", "Calendar access is required to create travel reminders");
-					return;
-				}
-				
-				// Create new event
-				const startDate = destination.suggestedTravelDates[0];
-				const endDate = destination.suggestedTravelDates[1];
-				const location = `${destination.name} (${formatCoordinate(destination.location.latitude, destination.location.longitude)})`;
-				
-				const eventId = await NativeEventKit.createEvent(
-					`Travel to ${destination.name}`,
-					startDate,
-					endDate,
-					location,
-					destination.description,
-					1440 // 24 hours before
-				);
-				
-				if (eventId) {
-					setEventId(destination.name, eventId);
-					Alert.alert("Success", "Travel event added to calendar");
-				} else {
-					Alert.alert("Error", "Failed to create calendar event");
-				}
+				deleteCalendarEvent();
+				return;
 			}
+			
+			const hasPermission = await checkCalendarPermission();
+			if (!hasPermission) return;
+			
+			createCalendarEvent();
 		} catch (error) {
 			Alert.alert("Error", "Calendar operation failed");
 			console.error("Calendar error:", error);
 		} finally {
 			setIsCalendarLoading(false);
 		}
-	};
+	}
 
 	const mapRegion = {
 		latitude: destination.location.latitude,
