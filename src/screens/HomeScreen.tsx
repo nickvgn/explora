@@ -80,11 +80,12 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	imageContainer: {
 		position: "relative",
-		aspectRatio: 0.75,
+		width: (rt.screen.width - 48) / 2,
+		height: 200,
 	},
 	cardImage: {
-		width: "100%",
-		height: "100%",
+		width: (rt.screen.width - 48) / 2,
+		height: 200,
 		borderRadius: 24,
 	},
 	textOverlay: {

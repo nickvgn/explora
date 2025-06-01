@@ -86,11 +86,12 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	imageContainer: {
 		position: "relative",
-		height: rt.screen.height * 0.6,
+		width: rt.screen.width,
+		height: 400,
 	},
 	heroImage: {
-		width: "100%",
-		height: "100%",
+		width: rt.screen.width,
+		height: 400,
 		borderBottomLeftRadius: 24,
 		borderBottomRightRadius: 24,
 	},
