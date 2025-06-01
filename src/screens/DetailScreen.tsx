@@ -3,11 +3,15 @@ import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import React from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
+import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import data from "../../data.json";
 import type { Destination, RootStackParamList } from "../navigation/types";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Detail">;
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 function InfoPill({ icon, text }: { icon: string; text: string }) {
 	return (
@@ -18,7 +22,8 @@ function InfoPill({ icon, text }: { icon: string; text: string }) {
 	);
 }
 
-export default function DetailScreen({ route, navigation }: Props) {
+export default function DetailScreen({ route }: Props) {
+	const navigation = useNavigation<NavigationProp>();
 	const { destination } = route.params;
 
 	const formatCoordinate = (lat: number, lng: number) => {
@@ -31,6 +36,17 @@ export default function DetailScreen({ route, navigation }: Props) {
 			month: "short",
 			day: "numeric",
 		});
+	};
+
+	const mapRegion = {
+		latitude: destination.location.latitude,
+		longitude: destination.location.longitude,
+		latitudeDelta: 0.05,
+		longitudeDelta: 0.05,
+	};
+
+	const handleMapPress = () => {
+		navigation.navigate("Map", { destination });
 	};
 
 	return (
@@ -58,6 +74,32 @@ export default function DetailScreen({ route, navigation }: Props) {
 				</View>
 
 				<Text style={styles.description}>{destination.description}</Text>
+
+				<View style={styles.mapSection}>
+					<Text style={styles.sectionTitle}>Location</Text>
+					<Pressable style={styles.mapPreview} onPress={handleMapPress}>
+						<MapView
+							style={styles.mapView}
+							provider={PROVIDER_DEFAULT}
+							region={mapRegion}
+							scrollEnabled={false}
+							zoomEnabled={false}
+							rotateEnabled={false}
+							pitchEnabled={false}
+						>
+							<Marker
+								coordinate={{
+									latitude: destination.location.latitude,
+									longitude: destination.location.longitude,
+								}}
+								title={destination.name}
+							/>
+						</MapView>
+						<View style={styles.mapOverlay}>
+							<Text style={styles.mapOverlayText}>Tap to view full map</Text>
+						</View>
+					</Pressable>
+				</View>
 			</View>
 		</ScrollView>
 	);
@@ -128,5 +170,40 @@ const styles = StyleSheet.create((theme, rt) => ({
 		fontSize: rt.fontScale * 14,
 		fontWeight: "600",
 		color: theme.colors.primary,
+	},
+	mapSection: {
+		marginBottom: 24,
+	},
+	sectionTitle: {
+		fontSize: rt.fontScale * 24,
+		fontWeight: "800",
+		color: theme.colors.text,
+		marginBottom: 12,
+	},
+	mapPreview: {
+		position: "relative",
+		height: 150,
+		borderRadius: 20,
+		overflow: "hidden",
+		backgroundColor: theme.colors.secondary,
+	},
+	mapView: {
+		width: "100%",
+		height: 150,
+	},
+	mapOverlay: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: "rgba(0, 0, 0, 0.3)",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	mapOverlayText: {
+		fontSize: rt.fontScale * 16,
+		fontWeight: "600",
+		color: "white",
 	},
 }));

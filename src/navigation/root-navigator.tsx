@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { UnistylesRuntime } from "react-native-unistyles";
 import HomeScreen from "../screens/HomeScreen";
 import DetailScreen from "../screens/DetailScreen";
+import MapScreen from "../screens/MapScreen";
 
 const RootStack = createNativeStackNavigator({
 	screens: {
@@ -30,9 +31,19 @@ const RootStack = createNativeStackNavigator({
 				headerShown: true,
 				headerTransparent: true,
 				headerTitle: "",
-				headerBackTitleVisible: false,
 				headerShadowVisible: false,
 				headerTintColor: UnistylesRuntime.getTheme().colors.primary,
+			},
+		},
+		Map: {
+			screen: MapScreen,
+			options: {
+				headerShown: false,
+				presentation: "formSheet",
+				sheetAllowedDetents: [0.5, 1.0],
+				sheetLargestUndimmedDetentIndex: 0,
+				sheetGrabberVisible: true,
+				sheetCornerRadius: 20,
 			},
 		},
 	},

@@ -7,4 +7,7 @@ export type RootStackParamList = {
 	Detail: {
 		destination: Destination;
 	};
+	Map: {
+		destination: Destination;
+	};
 }; 
