@@ -25,24 +25,6 @@
     reminderMinutesBefore:(NSNumber *)reminderMinutesBefore {
     
     @try {
-        // Check EventKit authorization status
-        EKAuthorizationStatus status = [EKEventStore authorizationStatusForEntityType:EKEntityTypeEvent];
-        
-        if (status == EKAuthorizationStatusDenied || status == EKAuthorizationStatusRestricted) {
-            NSLog(@"EventKit Error: Access denied or restricted");
-            return nil;
-        }
-        
-        if (status == EKAuthorizationStatusNotDetermined) {
-            NSLog(@"EventKit Error: Authorization not determined. Need to request permission first.");
-            return nil;
-        }
-        
-        if (status != EKAuthorizationStatusAuthorized) {
-            NSLog(@"EventKit Error: Not authorized. Status: %ld", (long)status);
-            return nil;
-        }
-        
         // Check if we have a default calendar
         EKCalendar *defaultCalendar = [self.eventStore defaultCalendarForNewEvents];
         if (!defaultCalendar) {

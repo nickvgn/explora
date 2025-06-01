@@ -15,6 +15,7 @@ import Animated, {
 	type SharedValue,
 } from "react-native-reanimated";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
+import { check, request, openSettings, PERMISSIONS, RESULTS } from "react-native-permissions";
 import type { Destination, RootStackParamList } from "../navigation/types";
 import { useDestinationsStore } from "../store/destinationsStore";
 import NativeEventKit from "../../specs/NativeEventKit";
@@ -138,7 +139,7 @@ export default function DetailScreen({ route }: Props) {
 		
 		try {
 			if (destination.eventId) {
-				// Delete existing event
+				// Delete existing event (no permission needed to delete)
 				const success = await NativeEventKit.deleteEvent(destination.eventId);
 				if (success) {
 					removeEventId(destination.name);
@@ -147,6 +148,45 @@ export default function DetailScreen({ route }: Props) {
 					Alert.alert("Error", "Failed to remove event from calendar");
 				}
 			} else {
+				// Check calendar permission first
+				const permissionStatus = await check(PERMISSIONS.IOS.CALENDARS);
+				
+				let hasPermission = false;
+				
+				switch (permissionStatus) {
+					case RESULTS.GRANTED:
+						hasPermission = true;
+						break;
+					case RESULTS.DENIED:
+						// Request permission
+						const requestResult = await request(PERMISSIONS.IOS.CALENDARS);
+						hasPermission = requestResult === RESULTS.GRANTED;
+						break;
+					case RESULTS.BLOCKED:
+						Alert.alert(
+							"Calendar Access Denied",
+							"Please enable calendar access in Settings to create travel reminders.",
+							[
+								{ text: "Cancel", style: "cancel" },
+								{ text: "Open Settings", onPress: () => {
+									openSettings();
+								}}
+							]
+						);
+						return;
+					case RESULTS.UNAVAILABLE:
+						Alert.alert("Error", "Calendar is not available on this device");
+						return;
+					case RESULTS.LIMITED:
+						hasPermission = true;
+						break;
+				}
+				
+				if (!hasPermission) {
+					Alert.alert("Permission Required", "Calendar access is required to create travel reminders");
+					return;
+				}
+				
 				// Create new event
 				const startDate = destination.suggestedTravelDates[0];
 				const endDate = destination.suggestedTravelDates[1];
