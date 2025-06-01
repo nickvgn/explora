@@ -124,7 +124,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	destinationTitle: {
 		fontSize: rt.fontScale * 32,
-		fontWeight: "800",
+		fontFamily: theme.fonts.extraBold,
 		color: "white",
 		marginBottom: 4,
 		textShadowColor: "rgba(0, 0, 0, 0.3)",

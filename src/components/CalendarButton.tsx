@@ -121,7 +121,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	calendarButtonText: {
 		fontSize: rt.fontScale * 14,
-		fontWeight: "600" as const,
+		fontFamily: theme.fonts.bold,
 		color: "white",
 		textAlign: "center" as const,
 	},

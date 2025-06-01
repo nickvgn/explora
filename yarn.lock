@@ -1094,6 +1094,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@expo-google-fonts/manrope@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@expo-google-fonts/manrope@npm:0.4.0"
+  checksum: 10c0/b7e5791a8b3e592258c9e81889d59806819598ba2c012492d6b2b465a617a5f625f88fbcfe488b7ebba788b3dc8ec9bc9c3f251482f2ce44798ec36674c7dfe9
+  languageName: node
+  linkType: hard
+
 "@expo/cli@npm:0.24.13":
   version: 0.24.13
   resolution: "@expo/cli@npm:0.24.13"
@@ -3180,6 +3187,7 @@ __metadata:
   resolution: "explora@workspace:."
   dependencies:
     "@babel/core": "npm:^7.20.0"
+    "@expo-google-fonts/manrope": "npm:^0.4.0"
     "@expo/vector-icons": "npm:^14.1.0"
     "@react-navigation/native": "npm:^7.1.10"
     "@react-navigation/native-stack": "npm:^7.3.14"
@@ -3187,6 +3195,7 @@ __metadata:
     "@types/react": "npm:~19.0.10"
     expo: "npm:~53.0.9"
     expo-blur: "npm:~14.1.4"
+    expo-font: "npm:^13.3.1"
     expo-image: "npm:~2.1.7"
     expo-status-bar: "npm:~2.2.3"
     react: "npm:19.0.0"
@@ -3253,7 +3262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-font@npm:~13.3.1":
+"expo-font@npm:^13.3.1, expo-font@npm:~13.3.1":
   version: 13.3.1
   resolution: "expo-font@npm:13.3.1"
   dependencies:

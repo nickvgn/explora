@@ -8,6 +8,13 @@ export const lightTheme = {
 		destructive: "#EF4444",
 		success: "#4CAF50",
 	},
+	fonts: {
+		regular: "Manrope_400Regular",
+		medium: "Manrope_500Medium",
+		semiBold: "Manrope_600SemiBold",
+		bold: "Manrope_700Bold",
+		extraBold: "Manrope_800ExtraBold",
+	},
 };
 
 export const darkTheme = {
@@ -19,6 +26,13 @@ export const darkTheme = {
 		cardBackground: "#1E1E1E",
 		destructive: "#FF6B6B",
 		success: "#66BB6A",
+	},
+	fonts: {
+		regular: "Manrope_400Regular",
+		medium: "Manrope_500Medium",
+		semiBold: "Manrope_600SemiBold",
+		bold: "Manrope_700Bold",
+		extraBold: "Manrope_800ExtraBold",
 	},
 };
 

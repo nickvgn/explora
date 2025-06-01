@@ -94,6 +94,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	description: {
 		fontSize: rt.fontScale * 16,
 		lineHeight: rt.fontScale * 24,
+		fontFamily: theme.fonts.regular,
 		color: theme.colors.primaryText,
 		marginBottom: 24,
 	},
@@ -102,7 +103,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	sectionTitle: {
 		fontSize: rt.fontScale * 24,
-		fontWeight: "800",
+		fontFamily: theme.fonts.extraBold,
 		color: theme.colors.primaryText,
 		marginBottom: 12,
 	},

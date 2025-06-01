@@ -15,13 +15,13 @@ const ThemedMapView = withUnistyles(MapView, (theme, rt) => ({
 }));
 
 export default function MapScreen({ route }: Props) {
-	const { destination } = route.params;
+	const { latitude, longitude } = route.params;
 
 	const mapRegion = {
-		latitude: destination.location.latitude,
-		longitude: destination.location.longitude,
-		latitudeDelta: 0.1,
-		longitudeDelta: 0.1,
+		latitude,
+		longitude,
+		latitudeDelta: 0.01,
+		longitudeDelta: 0.01,
 	};
 
 	return (
@@ -35,11 +35,9 @@ export default function MapScreen({ route }: Props) {
 			>
 				<Marker
 					coordinate={{
-						latitude: destination.location.latitude,
-						longitude: destination.location.longitude,
+						latitude,
+						longitude,
 					}}
-					title={destination.name}
-					description={destination.description}
 				/>
 			</ThemedMapView>
 		</View>

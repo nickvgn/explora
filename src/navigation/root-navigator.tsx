@@ -24,9 +24,11 @@ export function Navigation() {
 						headerLargeTitle: true,
 						headerLargeTitleStyle: {
 							color: theme.colors.primaryText,
+							fontFamily: theme.fonts.extraBold,
 						},
 						headerTitleStyle: {
 							color: theme.colors.primaryText,
+							fontFamily: theme.fonts.bold,
 						},
 						headerTransparent: true,
 						headerBlurEffect: rt.themeName === "dark" ? "dark" : "light",
@@ -35,6 +37,7 @@ export function Navigation() {
 							backgroundColor: theme.colors.background,
 						},
 						headerRight: () => <ThemeButton />,
+						headerBackTitle: "Explore",
 					}}
 				/>
 				<Stack.Screen
@@ -45,7 +48,11 @@ export function Navigation() {
 						headerTransparent: true,
 						headerTitle: "",
 						headerShadowVisible: false,
-						headerTintColor: theme.colors.primary,
+						headerTintColor: theme.colors.primaryText,
+						headerBackTitle: "Explore",
+						headerBackTitleStyle: {
+							fontFamily: theme.fonts.medium,
+						},
 					}}
 				/>
 				<Stack.Screen
@@ -54,8 +61,6 @@ export function Navigation() {
 					options={{
 						headerShown: false,
 						presentation: "formSheet",
-						sheetAllowedDetents: [0.5, 1.0],
-						sheetLargestUndimmedDetentIndex: 0,
 						sheetGrabberVisible: true,
 						sheetCornerRadius: 20,
 					}}

@@ -168,7 +168,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	sectionTitle: {
 		fontSize: rt.fontScale * 24,
-		fontWeight: "800",
+		fontFamily: theme.fonts.extraBold,
 		color: theme.colors.primaryText,
 		marginBottom: 12,
 	},
@@ -187,14 +187,14 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	calendarTitle: {
 		fontSize: rt.fontScale * 18,
-		fontWeight: "700",
+		fontFamily: theme.fonts.bold,
 		color: theme.colors.primaryText,
 		marginBottom: 4,
 	},
 	calendarDates: {
 		fontSize: rt.fontScale * 16,
 		color: theme.colors.primaryText,
-		fontWeight: "600",
+		fontFamily: theme.fonts.medium,
 		marginBottom: 8,
 	},
 	calendarStatusBadge: {
@@ -209,7 +209,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	calendarStatusText: {
 		fontSize: rt.fontScale * 14,
-		fontWeight: "600",
+		fontFamily: theme.fonts.semiBold,
 		color: "white",
 	},
 }));

@@ -111,7 +111,7 @@ const styles = StyleSheet.create((theme, rt) => ({
 	},
 	cardTitle: {
 		fontSize: rt.fontScale * 16,
-		fontWeight: "700",
+		fontFamily: theme.fonts.bold,
 		color: "white",
 		textShadowColor: "rgba(0, 0, 0, 0.3)",
 		textShadowOffset: { width: 0, height: 1 },

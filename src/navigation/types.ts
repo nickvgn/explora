@@ -1,6 +1,6 @@
-import type { DestinationWithEvent } from "../store/destinationsStore";
+import type data from "../../data.json";
 
-export type Destination = DestinationWithEvent;
+export type Destination = (typeof data.destinations)[0];
 
 export type RootStackParamList = {
 	Home: undefined;
@@ -8,6 +8,7 @@ export type RootStackParamList = {
 		destination: Destination;
 	};
 	Map: {
-		destination: Destination;
+		latitude: number;
+		longitude: number;
 	};
 };
