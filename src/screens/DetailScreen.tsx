@@ -12,7 +12,8 @@ import Animated, {
 	useSharedValue, 
 	useAnimatedStyle, 
 	interpolate, 
-	Extrapolation 
+	Extrapolation,
+	type SharedValue
 } from "react-native-reanimated";
 import data from "../../data.json";
 import type { Destination, RootStackParamList } from "../navigation/types";
@@ -21,6 +22,59 @@ const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
 
 type Props = NativeStackScreenProps<RootStackParamList, "Detail">;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
+type DestinationHeaderProps = {
+	sv: SharedValue<number>;
+	destination: Destination;
+};
+
+function DestinationHeader({ sv, destination }: DestinationHeaderProps) {
+	const animatedImageStyle = useAnimatedStyle(() => {
+		return {
+			transform: [
+				{
+					scale: interpolate(sv.value, [-50, 0], [1.3, 1], {
+						extrapolateLeft: 'extend',
+						extrapolateRight: 'clamp',
+					}),
+				},
+				{
+					translateY: interpolate(sv.value, [0, 50], [0, 50], Extrapolation.CLAMP),
+				},
+			],
+		};
+	});
+
+	const animatedTextStyle = useAnimatedStyle(() => {
+		return {
+			opacity: interpolate(sv.value, [0, IMAGE_HEIGHT * 0.25], [1, 0], Extrapolation.CLAMP),
+			transform: [
+				{
+					translateY: interpolate(
+						sv.value,
+						[0, IMAGE_HEIGHT * 0.25],
+						[0, 20],
+						Extrapolation.CLAMP,
+					),
+				},
+			],
+		};
+	});
+
+	return (
+		<View style={styles.heroSection}>
+			<Animated.View style={[styles.imageContainer, animatedImageStyle]}>
+				<Image source={{ uri: destination.image }} style={styles.heroImage} />
+			</Animated.View>
+
+			<Animated.View style={[styles.titleOverlay, animatedTextStyle]}>
+				<BlurView intensity={30} style={styles.blurContainer}>
+					<Text style={styles.destinationTitle}>{destination.name}</Text>
+				</BlurView>
+			</Animated.View>
+		</View>
+	);
+}
 
 function InfoPill({ icon, text }: { icon: string; text: string }) {
 	return (
@@ -38,38 +92,6 @@ export default function DetailScreen({ route }: Props) {
 	const translationY = useSharedValue(0);
 	const scrollHandler = useAnimatedScrollHandler((event) => {
 		translationY.value = event.contentOffset.y;
-	});
-
-	const animatedImageStyle = useAnimatedStyle(() => {
-		return {
-			transform: [
-				{
-					scale: interpolate(translationY.value, [-50, 0], [1.3, 1], {
-						extrapolateLeft: 'extend',
-						extrapolateRight: 'clamp',
-					}),
-				},
-				{
-					translateY: interpolate(translationY.value, [0, 50], [0, 50], Extrapolation.CLAMP),
-				},
-			],
-		};
-	});
-
-	const animatedTextStyle = useAnimatedStyle(() => {
-		return {
-			opacity: interpolate(translationY.value, [0, IMAGE_HEIGHT * 0.25], [1, 0], Extrapolation.CLAMP),
-			transform: [
-				{
-					translateY: interpolate(
-						translationY.value,
-						[0, IMAGE_HEIGHT * 0.25],
-						[0, 20],
-						Extrapolation.CLAMP,
-					),
-				},
-			],
-		};
 	});
 
 	const formatCoordinate = (lat: number, lng: number) => {
@@ -102,17 +124,7 @@ export default function DetailScreen({ route }: Props) {
 			onScroll={scrollHandler}
 			scrollEventThrottle={1}
 		>
-			<View style={styles.heroSection}>
-				<Animated.View style={[styles.imageContainer, animatedImageStyle]}>
-					<Image source={{ uri: destination.image }} style={styles.heroImage} />
-				</Animated.View>
-
-				<Animated.View style={[styles.titleOverlay, animatedTextStyle]}>
-					<BlurView intensity={30} style={styles.blurContainer}>
-						<Text style={styles.destinationTitle}>{destination.name}</Text>
-					</BlurView>
-				</Animated.View>
-			</View>
+			<DestinationHeader sv={translationY} destination={destination} />
 
 			<View style={styles.content}>
 				<View style={styles.pillsContainer}>
@@ -177,8 +189,6 @@ const styles = StyleSheet.create((theme, rt) => ({
 	heroImage: {
 		width: rt.screen.width,
 		height: IMAGE_HEIGHT,
-		borderBottomLeftRadius: 24,
-		borderBottomRightRadius: 24,
 	},
 	titleOverlay: {
 		position: "absolute",
