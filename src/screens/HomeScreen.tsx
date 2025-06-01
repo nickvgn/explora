@@ -11,11 +11,14 @@ import { useDestinationsStore } from "../store/destinationsStore";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-const ThemedBlurView = withUnistyles(BlurView, (theme, rt) => ({
+const ThemedBlurView = withUnistyles(BlurView, (_, rt) => ({
 	tint: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
 }));
 
-function DestinationCard({ item, index }: { item: Destination; index: number }) {
+function DestinationCard({
+	item,
+	index,
+}: { item: Destination; index: number }) {
 	const navigation = useNavigation<NavigationProp>();
 
 	const handlePress = () => {
@@ -25,14 +28,8 @@ function DestinationCard({ item, index }: { item: Destination; index: number }) 
 	return (
 		<Pressable style={styles.card} onPress={handlePress}>
 			<View style={styles.imageContainer}>
-				<Image 
-					source={{ uri: item.image }} 
-					style={styles.cardImage}
-				/>
-				<ThemedBlurView 
-					intensity={25}
-					style={styles.textOverlay}
-				>
+				<Image source={{ uri: item.image }} style={styles.cardImage} />
+				<ThemedBlurView intensity={25} style={styles.textOverlay}>
 					<Text style={styles.cardTitle}>{item.name}</Text>
 				</ThemedBlurView>
 			</View>
@@ -41,13 +38,20 @@ function DestinationCard({ item, index }: { item: Destination; index: number }) 
 }
 
 export default function HomeScreen() {
-	const destinationsRecord = useDestinationsStore(state => state.destinations);
-	const destinations = useMemo(() => Object.values(destinationsRecord), [destinationsRecord]);
+	const destinationsRecord = useDestinationsStore(
+		(state) => state.destinations,
+	);
+	const destinations = useMemo(
+		() => Object.values(destinationsRecord),
+		[destinationsRecord],
+	);
 
 	return (
 		<FlashList
 			data={destinations}
-			renderItem={({ item, index }) => <DestinationCard item={item} index={index} />}
+			renderItem={({ item, index }) => (
+				<DestinationCard item={item} index={index} />
+			)}
 			keyExtractor={(item) => item.name}
 			numColumns={2}
 			contentInsetAdjustmentBehavior="automatic"

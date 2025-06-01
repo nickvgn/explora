@@ -10,7 +10,11 @@ import Animated, {
 	FadeInUp,
 	type SharedValue,
 } from "react-native-reanimated";
-import { StyleSheet, UnistylesRuntime, withUnistyles } from "react-native-unistyles";
+import {
+	StyleSheet,
+	UnistylesRuntime,
+	withUnistyles,
+} from "react-native-unistyles";
 import DestinationHeader from "../components/DestinationHeader";
 import TravelPlanningSection from "../components/TravelPlanningSection";
 import type { Destination, RootStackParamList } from "../navigation/types";
@@ -18,8 +22,10 @@ import { useDestinationsStore } from "../store/destinationsStore";
 
 const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
 
-const ThemedMapView = withUnistyles(MapView, (theme, rt) => ({
-	userInterfaceStyle: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
+const ThemedMapView = withUnistyles(MapView, (_, rt) => ({
+	userInterfaceStyle: (rt.themeName === "dark" ? "dark" : "light") as
+		| "dark"
+		| "light",
 }));
 
 type Props = NativeStackScreenProps<RootStackParamList, "Detail">;
@@ -75,7 +81,10 @@ export default function DetailScreen({ route }: Props) {
 					/>
 				</Animated.View>
 
-				<Animated.View entering={FadeInUp.delay(300).duration(300)} style={styles.mapSection}>
+				<Animated.View
+					entering={FadeInUp.delay(300).duration(300)}
+					style={styles.mapSection}
+				>
 					<Text style={styles.sectionTitle}>Location</Text>
 					<Pressable style={styles.mapPreview} onPress={handleMapPress}>
 						<ThemedMapView
