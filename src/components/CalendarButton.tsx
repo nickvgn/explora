@@ -8,7 +8,7 @@ import Animated, {
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import { AntDesign } from "@expo/vector-icons";
 
-interface CalendarButtonProps {
+type CalendarButtonProps = {
 	hasEvent: boolean;
 	isLoading: boolean;
 	onPress: () => void;

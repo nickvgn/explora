@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { View, Text } from "react-native";
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
+import React, { useState } from "react";
+import { Text, View } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	interpolate,
@@ -9,7 +9,11 @@ import Animated, {
 	FadeIn,
 	type SharedValue,
 } from "react-native-reanimated";
-import { StyleSheet, UnistylesRuntime, withUnistyles } from "react-native-unistyles";
+import {
+	StyleSheet,
+	UnistylesRuntime,
+	withUnistyles,
+} from "react-native-unistyles";
 import type { Destination } from "../navigation/types";
 
 const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
@@ -18,14 +22,17 @@ const ThemedBlurView = withUnistyles(BlurView, (theme, rt) => ({
 	tint: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
 }));
 
-interface DestinationHeaderProps {
+type DestinationHeaderProps = {
 	sv: SharedValue<number>;
 	destination: Destination;
-}
+};
 
-export default function DestinationHeader({ sv, destination }: DestinationHeaderProps) {
+export default function DestinationHeader({
+	sv,
+	destination,
+}: DestinationHeaderProps) {
 	const [imageError, setImageError] = useState(false);
-	
+
 	const animatedImageStyle = useAnimatedStyle(() => {
 		return {
 			transform: [
@@ -68,7 +75,8 @@ export default function DestinationHeader({ sv, destination }: DestinationHeader
 		};
 	});
 
-	const fallbackImage = "https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=3869&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+	const fallbackImage =
+		"https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=3869&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
 	return (
 		<View style={styles.heroSection}>
@@ -76,7 +84,7 @@ export default function DestinationHeader({ sv, destination }: DestinationHeader
 				<Image source={{ uri: destination.image }} style={styles.heroImage} />
 			</Animated.View>
 
-			<Animated.View 
+			<Animated.View
 				style={[styles.titleOverlay, animatedTextStyle]}
 				entering={FadeIn.delay(150).duration(400)}
 			>
@@ -123,4 +131,4 @@ const styles = StyleSheet.create((theme, rt) => ({
 		textShadowOffset: { width: 0, height: 1 },
 		textShadowRadius: 2,
 	},
-})); 
+}));

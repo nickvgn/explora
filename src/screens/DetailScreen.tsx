@@ -68,6 +68,7 @@ export default function DetailScreen({ route }: Props) {
 				<Animated.View entering={FadeInUp.delay(200).duration(300)}>
 					<TravelPlanningSection
 						destinationName={destination.name}
+						destinationDescription={destination.description}
 						suggestedDates={destination.suggestedTravelDates}
 					/>
 				</Animated.View>

@@ -1,3 +1,4 @@
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FlashList } from "@shopify/flash-list";
@@ -6,10 +7,9 @@ import { Image } from "expo-image";
 import React, { useMemo } from "react";
 import { Pressable, Text, View } from "react-native";
 import { StyleSheet, withUnistyles } from "react-native-unistyles";
-import { AntDesign } from "@expo/vector-icons";
-import type { Destination, RootStackParamList } from "../navigation/types";
-import { useDestinationsStore } from "../store/destinationsStore";
 import data from "../../data.json";
+import type { Destination, RootStackParamList } from "../navigation/types";
+import { useTravelStore } from "../store/travelStore";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -26,7 +26,9 @@ function DestinationCard({
 	index,
 }: { item: Destination; index: number }) {
 	const navigation = useNavigation<NavigationProp>();
-	const eventId = useDestinationsStore(state => state.getEventByDestination(item.name));
+	const eventId = useTravelStore((state) =>
+		state.getEventByDestination(item.name),
+	);
 
 	const handlePress = () => {
 		navigation.navigate("Detail", { destination: item });

@@ -4,26 +4,24 @@ import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import { check, request, openSettings, PERMISSIONS, RESULTS } from "react-native-permissions";
 import CalendarButton from "./CalendarButton";
 import NativeEventKit from "../../specs/NativeEventKit";
-import { useDestinationsStore } from "../store/destinationsStore";
-import data from "../../data.json";
+import { useTravelStore } from "../store/travelStore";
 
 interface TravelPlanningSectionProps {
 	destinationName: string;
+	destinationDescription: string;
 	suggestedDates: string[];
 }
 
 function TravelPlanningSection({
 	destinationName,
+	destinationDescription,
 	suggestedDates,
 }: TravelPlanningSectionProps) {
 	const [isCalendarLoading, setIsCalendarLoading] = useState(false);
 	
-	const eventId = useDestinationsStore(state => state.getEventByDestination(destinationName));
-	const addEvent = useDestinationsStore(state => state.addEvent);
-	const removeEventByDestination = useDestinationsStore(state => state.removeEventByDestination);
-
-	// Get destination data from JSON file
-	const destination = data.destinations.find(dest => dest.name === destinationName);
+	const eventId = useTravelStore(state => state.getEventByDestination(destinationName));
+	const addEvent = useTravelStore(state => state.addEvent);
+	const removeEventByDestination = useTravelStore(state => state.removeEventByDestination);
 
 	const getTravelDateRange = useCallback(() => {
 		const startDate = new Date(suggestedDates[0]);
@@ -65,8 +63,6 @@ function TravelPlanningSection({
 	}, []);
 
 	const createCalendarEvent = useCallback(() => {
-		if (!destination) return;
-		
 		const startDate = suggestedDates[0];
 		const endDate = suggestedDates[1];
 		const locationString = destinationName;
@@ -76,7 +72,7 @@ function TravelPlanningSection({
 			startDate,
 			endDate,
 			locationString,
-			destination.description,
+			destinationDescription,
 			1440
 		);
 		
@@ -86,7 +82,7 @@ function TravelPlanningSection({
 		}
 		
 		addEvent(newEventId, destinationName);
-	}, [destinationName, suggestedDates, destination, addEvent]);
+	}, [destinationName, suggestedDates, destinationDescription, addEvent]);
 
 	const deleteCalendarEvent = useCallback(() => {
 		if (!eventId) return;
