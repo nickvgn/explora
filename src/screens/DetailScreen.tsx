@@ -1,20 +1,20 @@
+import { useNavigation } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
-import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import Animated, { 
-	useAnimatedScrollHandler, 
-	useSharedValue, 
-	useAnimatedStyle, 
-	interpolate, 
+import Animated, {
+	useAnimatedScrollHandler,
+	useSharedValue,
+	useAnimatedStyle,
+	interpolate,
 	Extrapolation,
-	type SharedValue
+	type SharedValue,
 } from "react-native-reanimated";
+import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import type { Destination, RootStackParamList } from "../navigation/types";
 
 const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
@@ -33,12 +33,17 @@ function DestinationHeader({ sv, destination }: DestinationHeaderProps) {
 			transform: [
 				{
 					scale: interpolate(sv.value, [-50, 0], [1.3, 1], {
-						extrapolateLeft: 'extend',
-						extrapolateRight: 'clamp',
+						extrapolateLeft: "extend",
+						extrapolateRight: "clamp",
 					}),
 				},
 				{
-					translateY: interpolate(sv.value, [0, 50], [0, 50], Extrapolation.CLAMP),
+					translateY: interpolate(
+						sv.value,
+						[0, 50],
+						[0, 50],
+						Extrapolation.CLAMP,
+					),
 				},
 			],
 		};
@@ -46,7 +51,12 @@ function DestinationHeader({ sv, destination }: DestinationHeaderProps) {
 
 	const animatedTextStyle = useAnimatedStyle(() => {
 		return {
-			opacity: interpolate(sv.value, [0, IMAGE_HEIGHT * 0.25], [1, 0], Extrapolation.CLAMP),
+			opacity: interpolate(
+				sv.value,
+				[0, IMAGE_HEIGHT * 0.25],
+				[1, 0],
+				Extrapolation.CLAMP,
+			),
 			transform: [
 				{
 					translateY: interpolate(
@@ -117,8 +127,8 @@ export default function DetailScreen({ route }: Props) {
 	};
 
 	return (
-		<Animated.ScrollView 
-			style={styles.container} 
+		<Animated.ScrollView
+			style={styles.container}
 			showsVerticalScrollIndicator={false}
 			onScroll={scrollHandler}
 			scrollEventThrottle={1}
@@ -281,4 +291,3 @@ const styles = StyleSheet.create((theme, rt) => ({
 		color: "white",
 	},
 }));
-
