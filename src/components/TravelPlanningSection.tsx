@@ -5,27 +5,25 @@ import { check, request, openSettings, PERMISSIONS, RESULTS } from "react-native
 import CalendarButton from "./CalendarButton";
 import NativeEventKit from "../../specs/NativeEventKit";
 import { useDestinationsStore } from "../store/destinationsStore";
+import data from "../../data.json";
 
 interface TravelPlanningSectionProps {
 	destinationName: string;
-	eventId?: string;
 	suggestedDates: string[];
 }
 
 function TravelPlanningSection({
 	destinationName,
-	eventId,
 	suggestedDates,
 }: TravelPlanningSectionProps) {
 	const [isCalendarLoading, setIsCalendarLoading] = useState(false);
 	
-	const destination = useDestinationsStore(state => state.getDestination(destinationName));
-	const setEventId = useDestinationsStore(state => state.setEventId);
-	const removeEventId = useDestinationsStore(state => state.removeEventId);
+	const eventId = useDestinationsStore(state => state.getEventByDestination(destinationName));
+	const addEvent = useDestinationsStore(state => state.addEvent);
+	const removeEventByDestination = useDestinationsStore(state => state.removeEventByDestination);
 
-	const formatCoordinate = useCallback((lat: number, lng: number) => {
-		return `${Math.abs(lat).toFixed(4)}°${lat >= 0 ? "N" : "S"}, ${Math.abs(lng).toFixed(4)}°${lng >= 0 ? "E" : "W"}`;
-	}, []);
+	// Get destination data from JSON file
+	const destination = data.destinations.find(dest => dest.name === destinationName);
 
 	const getTravelDateRange = useCallback(() => {
 		const startDate = new Date(suggestedDates[0]);
@@ -71,7 +69,7 @@ function TravelPlanningSection({
 		
 		const startDate = suggestedDates[0];
 		const endDate = suggestedDates[1];
-		const locationString = `${destinationName} (${formatCoordinate(destination.location.latitude, destination.location.longitude)})`;
+		const locationString = destinationName;
 		
 		const newEventId = NativeEventKit.createEvent(
 			`Travel to ${destinationName}`,
@@ -87,8 +85,8 @@ function TravelPlanningSection({
 			return;
 		}
 		
-		setEventId(destinationName, newEventId);
-	}, [destinationName, suggestedDates, destination, formatCoordinate, setEventId]);
+		addEvent(newEventId, destinationName);
+	}, [destinationName, suggestedDates, destination, addEvent]);
 
 	const deleteCalendarEvent = useCallback(() => {
 		if (!eventId) return;
@@ -100,8 +98,8 @@ function TravelPlanningSection({
 			return;
 		}
 		
-		removeEventId(destinationName);
-	}, [eventId, destinationName, removeEventId]);
+		removeEventByDestination(destinationName);
+	}, [eventId, destinationName, removeEventByDestination]);
 
 	const handleCalendarAction = useCallback(async () => {
 		setIsCalendarLoading(true);

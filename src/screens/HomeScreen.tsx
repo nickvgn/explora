@@ -6,8 +6,10 @@ import { Image } from "expo-image";
 import React, { useMemo } from "react";
 import { Pressable, Text, View } from "react-native";
 import { StyleSheet, withUnistyles } from "react-native-unistyles";
+import { AntDesign } from "@expo/vector-icons";
 import type { Destination, RootStackParamList } from "../navigation/types";
 import { useDestinationsStore } from "../store/destinationsStore";
+import data from "../../data.json";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -15,11 +17,16 @@ const ThemedBlurView = withUnistyles(BlurView, (_, rt) => ({
 	tint: (rt.themeName === "dark" ? "dark" : "light") as "dark" | "light",
 }));
 
+const ThemedCalendarIcon = withUnistyles(AntDesign, (theme) => ({
+	color: theme.colors.primaryText,
+}));
+
 function DestinationCard({
 	item,
 	index,
 }: { item: Destination; index: number }) {
 	const navigation = useNavigation<NavigationProp>();
+	const eventId = useDestinationsStore(state => state.getEventByDestination(item.name));
 
 	const handlePress = () => {
 		navigation.navigate("Detail", { destination: item });
@@ -29,6 +36,11 @@ function DestinationCard({
 		<Pressable style={styles.card} onPress={handlePress}>
 			<View style={styles.imageContainer}>
 				<Image source={{ uri: item.image }} style={styles.cardImage} />
+				{eventId && (
+					<View style={styles.calendarIconContainer}>
+						<ThemedCalendarIcon name="calendar" size={16} />
+					</View>
+				)}
 				<ThemedBlurView intensity={25} style={styles.textOverlay}>
 					<Text style={styles.cardTitle}>{item.name}</Text>
 				</ThemedBlurView>
@@ -38,13 +50,7 @@ function DestinationCard({
 }
 
 export default function HomeScreen() {
-	const destinationsRecord = useDestinationsStore(
-		(state) => state.destinations,
-	);
-	const destinations = useMemo(
-		() => Object.values(destinationsRecord),
-		[destinationsRecord],
-	);
+	const destinations = data.destinations;
 
 	return (
 		<FlashList
@@ -55,14 +61,15 @@ export default function HomeScreen() {
 			keyExtractor={(item) => item.name}
 			numColumns={2}
 			contentInsetAdjustmentBehavior="automatic"
-			contentContainerStyle={styles.listContainer}
+			showsVerticalScrollIndicator={false}
 			ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+			contentContainerStyle={styles.container}
 		/>
 	);
 }
 
 const styles = StyleSheet.create((theme, rt) => ({
-	listContainer: {
+	container: {
 		paddingHorizontal: 8,
 		paddingTop: 16,
 		paddingBottom: 16,
@@ -91,6 +98,22 @@ const styles = StyleSheet.create((theme, rt) => ({
 		width: (rt.screen.width - 48) / 2,
 		height: 200,
 		borderRadius: 24,
+	},
+	calendarIconContainer: {
+		position: "absolute",
+		top: 12,
+		right: 12,
+		backgroundColor: theme.colors.background,
+		borderRadius: 12,
+		padding: 6,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 4,
+		elevation: 4,
 	},
 	textOverlay: {
 		position: "absolute",

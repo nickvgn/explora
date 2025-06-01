@@ -17,15 +17,15 @@ import {
 } from "react-native-unistyles";
 import DestinationHeader from "../components/DestinationHeader";
 import TravelPlanningSection from "../components/TravelPlanningSection";
-import type { Destination, RootStackParamList } from "../navigation/types";
-import { useDestinationsStore } from "../store/destinationsStore";
+import type { RootStackParamList } from "../navigation/types";
 
 const IMAGE_HEIGHT = UnistylesRuntime.screen.height * 0.45;
 
 const ThemedMapView = withUnistyles(MapView, (_, rt) => ({
-	userInterfaceStyle: (rt.themeName === "dark" ? "dark" : "light") as
-		| "dark"
-		| "light",
+	userInterfaceStyle:
+		rt.colorScheme === "dark"
+			? ("dark" as const)
+			: ("light" as const),
 }));
 
 type Props = NativeStackScreenProps<RootStackParamList, "Detail">;
@@ -33,26 +33,18 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function DetailScreen({ route }: Props) {
 	const navigation = useNavigation<NavigationProp>();
-	const { destination: routeDestination } = route.params;
-
-	// Get the current destination from store (with potential eventId)
-	const currentDestination = useDestinationsStore((state) =>
-		state.getDestination(routeDestination.name),
-	);
+	const { destination } = route.params;
 
 	const translationY = useSharedValue(0);
 	const scrollHandler = useAnimatedScrollHandler((event) => {
 		translationY.value = event.contentOffset.y;
 	});
 
-	// Fallback to route destination if not found in store
-	const destination = currentDestination || routeDestination;
-
 	const mapRegion = {
 		latitude: destination.location.latitude,
 		longitude: destination.location.longitude,
-		latitudeDelta: 0.05,
-		longitudeDelta: 0.05,
+		latitudeDelta: 0.01,
+		longitudeDelta: 0.01,
 	};
 
 	const handleMapPress = () => {
@@ -76,7 +68,6 @@ export default function DetailScreen({ route }: Props) {
 				<Animated.View entering={FadeInUp.delay(200).duration(300)}>
 					<TravelPlanningSection
 						destinationName={destination.name}
-						eventId={destination.eventId}
 						suggestedDates={destination.suggestedTravelDates}
 					/>
 				</Animated.View>
@@ -90,7 +81,7 @@ export default function DetailScreen({ route }: Props) {
 						<ThemedMapView
 							style={styles.mapView}
 							provider={PROVIDER_DEFAULT}
-							region={mapRegion}
+							initialRegion={mapRegion}
 							scrollEnabled={false}
 							zoomEnabled={false}
 							rotateEnabled={false}
@@ -104,9 +95,6 @@ export default function DetailScreen({ route }: Props) {
 								title={destination.name}
 							/>
 						</ThemedMapView>
-						<View style={styles.mapOverlay}>
-							<Text style={styles.mapOverlayText}>Tap to view full map</Text>
-						</View>
 					</Pressable>
 				</Animated.View>
 			</View>
