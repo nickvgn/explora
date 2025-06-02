@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Alert, Text, View } from "react-native";
 import {
 	PERMISSIONS,
@@ -39,7 +39,7 @@ export function SuggestedDates({
 		return `${startDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${endDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
 	}
 
-	async function checkCalendarPermission(): Promise<boolean> {
+	const checkCalendarPermission = useCallback(async (): Promise<boolean> => {
 		const permissionStatus = await check(PERMISSIONS.IOS.CALENDARS);
 
 		switch (permissionStatus) {
@@ -70,9 +70,9 @@ export function SuggestedDates({
 			default:
 				return false;
 		}
-	}
+	}, []);
 
-	function createCalendarEvent() {
+	const createCalendarEvent = useCallback(() => {
 		const startDate = suggestedDates[0];
 		const endDate = suggestedDates[1];
 		const locationString = destinationName;
@@ -92,9 +92,9 @@ export function SuggestedDates({
 		}
 
 		addEvent(newEventId, destinationName);
-	}
+	}, [suggestedDates, destinationName, destinationDescription, addEvent]);
 
-	function deleteCalendarEvent() {
+	const deleteCalendarEvent = useCallback(() => {
 		if (!eventId) {
 			return;
 		}
@@ -107,9 +107,9 @@ export function SuggestedDates({
 		}
 
 		removeEventByDestination(destinationName);
-	}
+	}, [eventId, removeEventByDestination, destinationName]);
 
-	async function handleCalendarAction() {
+	const handleCalendarAction = useCallback(async () => {
 		setIsCalendarLoading(true);
 
 		try {
@@ -126,7 +126,12 @@ export function SuggestedDates({
 		} finally {
 			setIsCalendarLoading(false);
 		}
-	}
+	}, [
+		eventId,
+		deleteCalendarEvent,
+		checkCalendarPermission,
+		createCalendarEvent,
+	]);
 
 	return (
 		<View style={styles.calendarSection}>
