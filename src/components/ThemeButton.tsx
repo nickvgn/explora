@@ -1,11 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable } from "react-native";
+import { MMKV } from "react-native-mmkv";
 import {
 	StyleSheet,
 	UnistylesRuntime,
 	useUnistyles,
 } from "react-native-unistyles";
+
+export const themeStorage = new MMKV({ id: "explora-theme" });
 
 export function ThemeButton() {
 	const { theme, rt } = useUnistyles();
@@ -14,6 +17,7 @@ export function ThemeButton() {
 		const currentTheme = rt.themeName;
 		const newTheme = currentTheme === "light" ? "dark" : "light";
 		UnistylesRuntime.setTheme(newTheme);
+		themeStorage.set("themeName", newTheme);
 	}
 
 	const isDark = rt.themeName === "dark";

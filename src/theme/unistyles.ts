@@ -1,5 +1,11 @@
 import { StyleSheet } from "react-native-unistyles";
+import { themeStorage } from "../components/ThemeButton";
 import { darkTheme, lightTheme } from "./themes";
+
+const persistedTheme = themeStorage.getString("themeName") as
+	| "light"
+	| "dark"
+	| undefined;
 
 const breakpoints = {
 	xs: 0,
@@ -22,7 +28,7 @@ StyleSheet.configure({
 	},
 	breakpoints,
 	settings: {
-		initialTheme: "light",
+		initialTheme: persistedTheme ?? "light",
 	},
 });
 
