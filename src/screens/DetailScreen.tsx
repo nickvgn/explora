@@ -24,14 +24,14 @@ export default function DetailScreen({ route, navigation }: Props) {
 		translationY.value = event.contentOffset.y;
 	});
 
-	function handleMapPress () {
+	function handleMapPress() {
 		const location = destination.location;
 
 		navigation.navigate("Map", {
 			latitude: location.latitude,
 			longitude: location.longitude,
 		});
-	};
+	}
 
 	return (
 		<Animated.ScrollView

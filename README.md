@@ -30,9 +30,9 @@ yarn ios:release
 
 ## Thought Process
 
-**Architecture**: Used Zustand for state management, [MMKV](https://github.com/mrousavy/react-native-mmkv) for synchronous persistent storage, and React Navigation's [native stack navigator](https://reactnavigation.org/docs/native-stack-navigator/) over JavaScript stack for true native performance using UINavigationController on iOS. Implemented custom EventKit native module using TurboModules for type-safe iOS calendar integration. [Unistyles 3.0](https://www.unistyl.es/v3/start/introduction) provides C++ cross-platform styling with no component wrappers and pure JSI bindings.
+**Architecture**: Used Zustand for state management, [MMKV](https://github.com/mrousavy/react-native-mmkv) for synchronous persistent storage, and React Navigation's [native stack navigator](https://reactnavigation.org/docs/native-stack-navigator/) over JavaScript stack for true native performance using UINavigationController on iOS. Implemented custom EventKit native module in Objective-C++ using TurboModules for synchronous, type-safe iOS calendar integration. [Unistyles 3.0](https://www.unistyl.es/v3/start/introduction) provides C++ cross-platform styling with no component wrappers and pure JSI bindings. TypeScript throughout for compile-time safety.
 
-**Performance**: FlashList for efficient rendering, lazy loading for map components, expo-image for optimized caching. MMKV provides synchronous read/write operations vs AsyncStorage's asynchronous overhead. Unistyles guarantees zero re-renders with no hooks/context overhead and consistent C++ parser output across platforms.
+**Performance**: [FlashList](https://shopify.github.io/flash-list/) over FlatList for 10x better rendering performance on large datasets. [expo-image](https://docs.expo.dev/versions/latest/sdk/image/) over Image for advanced caching, progressive loading, and memory optimization. MMKV provides synchronous read/write operations vs AsyncStorage's asynchronous overhead. Unistyles guarantees zero re-renders with no hooks/context overhead and consistent C++ parser output across platforms.
 
 **Design**: Manrope typography system, Unistyles for theming with dark/light mode support, Reanimated for smooth animations.
 
