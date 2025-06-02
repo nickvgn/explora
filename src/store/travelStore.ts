@@ -21,7 +21,6 @@ type TravelStore = {
 	calendarEvents: Record<string, string>; // destinationName -> eventId
 	addEvent: (eventId: string, destinationName: string) => void;
 	removeEvent: (eventId: string) => void;
-	getEventByDestination: (destinationName: string) => string | undefined;
 	removeEventByDestination: (destinationName: string) => void;
 };
 
@@ -50,10 +49,6 @@ export const useTravelStore = create<TravelStore>()(
 					}
 					return state;
 				}),
-
-			getEventByDestination: (destinationName) => {
-				return get().calendarEvents[destinationName];
-			},
 
 			removeEventByDestination: (destinationName) =>
 				set((state) => {

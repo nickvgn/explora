@@ -25,10 +25,8 @@ type DestinationCardProps = {
 
 export function DestinationCard({ item }: DestinationCardProps) {
 	const navigation = useNavigation<NavigationProp>();
-	const getEventByDestination = useTravelStore(
-		(state) => state.getEventByDestination,
-	);
-	const eventId = getEventByDestination(item.name);
+	const calendarEvents = useTravelStore((state) => state.calendarEvents);
+	const eventId = calendarEvents[item.name];
 
 	function handlePress() {
 		navigation.navigate("Detail", { destination: item });
