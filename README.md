@@ -43,6 +43,7 @@ yarn ios:release
 - Static JSON data for simplicity and offline capability  
 - MMKV over AsyncStorage for better performance
 - Expo dev client for faster iteration
+- Custom TurboModule implementation: `specs/NativeEventKit.ts`, `ios/NativeEventKit/RCTNativeEventKit.(h/mm)` with codegen configuration
 - Considered React Compiler: State management is already optimized with Zustand and Unistyles, making React Compiler overkill for this project scope
 - No zoom-in transition from list/grid to detail view: [React Native Reanimated's shared element transitions](https://docs.swmansion.com/react-native-reanimated/docs/shared-element-transitions/overview/#remarks) only support the old Paper architecture, not the new Fabric architecture. Alternative libraries are poorly maintained or incompatible with native stack navigator.
 
