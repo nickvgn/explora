@@ -9,9 +9,9 @@ import {
 import React, { type ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 
-interface FontProviderProps {
+type FontProviderProps = {
 	children: ReactNode;
-}
+};
 
 export default function FontProvider({ children }: FontProviderProps) {
 	const [fontsLoaded] = useFonts({

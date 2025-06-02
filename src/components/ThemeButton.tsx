@@ -10,20 +10,16 @@ import {
 export function ThemeButton() {
 	const { theme, rt } = useUnistyles();
 
-	const toggleTheme = () => {
+	function toggleTheme() {
 		const currentTheme = rt.themeName;
 		const newTheme = currentTheme === "light" ? "dark" : "light";
 		UnistylesRuntime.setTheme(newTheme);
-	};
+	}
 
 	const isDark = rt.themeName === "dark";
 
 	return (
-		<Pressable
-      style={styles.button}
-      hitSlop={15}
-      onPress={toggleTheme}
-    >
+		<Pressable style={styles.button} hitSlop={15} onPress={toggleTheme}>
 			<Ionicons
 				name={isDark ? "sunny" : "moon"}
 				size={24}
