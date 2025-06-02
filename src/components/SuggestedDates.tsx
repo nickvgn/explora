@@ -25,8 +25,9 @@ export function SuggestedDates({
 }: TravelPlanningSectionProps) {
 	const [isCalendarLoading, setIsCalendarLoading] = useState(false);
 
-	const calendarEvents = useTravelStore((state) => state.calendarEvents);
-	const eventId = calendarEvents[destinationName];
+	const eventId = useTravelStore(
+		(state) => state.calendarEvents[destinationName],
+	);
 	const addEvent = useTravelStore((state) => state.addEvent);
 	const removeEventByDestination = useTravelStore(
 		(state) => state.removeEventByDestination,

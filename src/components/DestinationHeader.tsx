@@ -81,12 +81,14 @@ export function DestinationHeader({
 			</Animated.View>
 
 			<Animated.View
-				style={[styles.titleOverlay, animatedTextStyle]}
+				style={styles.titleOverlay}
 				entering={FadeIn.delay(150).duration(400)}
 			>
-				<ThemedBlurView intensity={30} style={styles.blurContainer}>
-					<Text style={styles.destinationTitle}>{title}</Text>
-				</ThemedBlurView>
+				<Animated.View style={animatedTextStyle}>
+					<ThemedBlurView intensity={30} style={styles.blurContainer}>
+						<Text style={styles.destinationTitle}>{title}</Text>
+					</ThemedBlurView>
+				</Animated.View>
 			</Animated.View>
 		</View>
 	);
