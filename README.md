@@ -43,19 +43,7 @@ yarn ios:release
 - Static JSON data for simplicity and offline capability  
 - MMKV over AsyncStorage for better performance
 - Expo dev client for faster iteration
+- Considered React Compiler: State management is already optimized with Zustand and Unistyles, making React Compiler overkill for this project scope
 - No zoom-in transition from list/grid to detail view: [React Native Reanimated's shared element transitions](https://docs.swmansion.com/react-native-reanimated/docs/shared-element-transitions/overview/#remarks) only support the old Paper architecture, not the new Fabric architecture. Alternative libraries are poorly maintained or incompatible with native stack navigator.
-
-**Assumptions**:
-- Users primarily interested in travel planning functionality
-- Visual discovery is important (image-heavy design)
-- Calendar integration is core feature, not supplementary
-
-## Core Features Delivered
-
-- ✅ Home/Detail screens with destination grid
-- ✅ Native EventKit calendar integration (create/delete events)
-- ✅ Static JSON data with all required fields
-- ✅ Animations: detail screen fade-ins, calendar button confirmations
-- ✅ Clean UI with consistent design system
 
 **Bonus**: Map screen, persistent storage, dark mode, advanced typography, performance optimizations.
