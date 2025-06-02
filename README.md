@@ -1,6 +1,6 @@
 # Explora - Travel Destination Explorer App
 
-React Native travel app with native iOS calendar integration using EventKit framework.
+React Native travel app with native iOS calendar integration using the EventKit framework and TurboModules.
 
 ## How to Run the App
 
