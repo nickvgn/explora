@@ -32,7 +32,7 @@ yarn ios:release
 
 **Architecture**: Used Zustand for state management, [MMKV](https://github.com/mrousavy/react-native-mmkv) for synchronous persistent storage, and React Navigation's [native stack navigator](https://reactnavigation.org/docs/native-stack-navigator/) over JavaScript stack for true native performance using UINavigationController on iOS. Implemented custom EventKit native module in Objective-C++ using TurboModules for synchronous, type-safe iOS calendar integration. [Unistyles 3.0](https://www.unistyl.es/v3/start/introduction) provides C++ cross-platform styling with no component wrappers and pure JSI bindings. TypeScript throughout for compile-time safety.
 
-**Performance**: [FlashList](https://shopify.github.io/flash-list/) over FlatList for 10x better rendering performance on large datasets. [expo-image](https://docs.expo.dev/versions/latest/sdk/image/) over Image for advanced caching, progressive loading, and memory optimization. MMKV provides synchronous read/write operations vs AsyncStorage's asynchronous overhead. Unistyles guarantees zero re-renders with no hooks/context overhead and consistent C++ parser output across platforms.
+**Performance**: [FlashList](https://shopify.github.io/flash-list/) over FlatList for 10x better rendering performance on large datasets. [expo-image](https://docs.expo.dev/versions/latest/sdk/image/) over Image for advanced caching, progressive loading, and memory optimization. TurboModules over legacy bridge architecture for synchronous native calls in new React Native architecture. MMKV provides synchronous read/write operations vs AsyncStorage's asynchronous overhead. Unistyles guarantees zero re-renders with no hooks/context overhead.
 
 **Design**: Manrope typography system, Unistyles for theming with dark/light mode support, Reanimated for smooth animations.
 
@@ -41,9 +41,8 @@ yarn ios:release
 **Technical Decisions**:
 - iOS-only calendar integration (as specified)
 - Static JSON data for simplicity and offline capability  
-- MMKV over AsyncStorage for better performance
+- MMKV over AsyncStorage (30x faster performance)
 - Expo dev client for faster iteration
-- Custom TurboModule implementation: `specs/NativeEventKit.ts`, `ios/NativeEventKit/RCTNativeEventKit.(h/mm)` with codegen configuration
 - Considered React Compiler: State management is already optimized with Zustand and Unistyles, making React Compiler overkill for this project scope
 - No zoom-in transition from list/grid to detail view: [React Native Reanimated's shared element transitions](https://docs.swmansion.com/react-native-reanimated/docs/shared-element-transitions/overview/#remarks) only support the old Paper architecture, not the new Fabric architecture. Alternative libraries are poorly maintained or incompatible with native stack navigator.
 
